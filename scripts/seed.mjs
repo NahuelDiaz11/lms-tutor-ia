@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('--- Iniciando Semilla de Base de Datos LMS ---');
+  console.log('--- Iniciando Semilla de Base de Datos EdTech LMS (Inglés) ---');
 
   // Limpiar datos existentes en orden
   await prisma.message.deleteMany();
@@ -17,8 +17,8 @@ async function main() {
   const alumnoAutorizado = await prisma.user.create({
     data: {
       id: 'usr_autorizado_01',
-      email: 'alumno.autorizado@lms.poc',
-      name: 'Ana Silva (Con Acceso)',
+      email: 'alumno.autorizado@edtech.poc',
+      name: 'Ana Silva (Con Acceso al Curso)',
       role: 'STUDENT',
     },
   });
@@ -26,8 +26,8 @@ async function main() {
   const alumnoSinAcceso = await prisma.user.create({
     data: {
       id: 'usr_noautorizado_02',
-      email: 'alumno.noautorizado@lms.poc',
-      name: 'Pedro Gómez (Sin Acceso)',
+      email: 'alumno.noautorizado@edtech.poc',
+      name: 'Pedro Gómez (Sin Acceso al Curso)',
       role: 'STUDENT',
     },
   });
@@ -36,105 +36,96 @@ async function main() {
   console.log(`- ${alumnoAutorizado.name} (${alumnoAutorizado.email})`);
   console.log(`- ${alumnoSinAcceso.name} (${alumnoSinAcceso.email})`);
 
-  // 2. Crear 1 Curso
+  // 2. Crear 1 Curso EdTech de Inglés
   const curso = await prisma.course.create({
     data: {
-      id: 'curso_apis_web_101',
-      title: 'Fundamentos de APIs Web y Protocolo HTTP',
-      slug: 'fundamentos-apis-web-http',
-      description: 'Aprende los pilares esenciales de la comunicación cliente-servidor en la web moderna, verbos HTTP y arquitectura REST.',
+      id: 'curso_ingles_conversacional_101',
+      title: 'Inglés Práctico: Comunicación y Estructuras Fundamentales (A2-B1)',
+      slug: 'ingles-practico-comunicacion',
+      description: 'Desarrolla fluidez conversacional, domina el presente y el pasado, y practica tu comprensión oral y pronunciación con el tutor de IA por voz.',
     },
   });
 
   // 3. Crear las 2 Lecciones requeridas
   const leccion1 = await prisma.lesson.create({
     data: {
-      id: 'lec_http_metodos_01',
+      id: 'lec_ingles_present_simple_01',
       courseId: curso.id,
       order: 1,
-      title: 'Lección 1: Métodos HTTP y Arquitectura Cliente-Servidor',
-      slug: 'metodos-http-y-cliente-servidor',
-      summary: 'Comprende el rol de los métodos HTTP principales, con énfasis en GET y POST, y la noción de idempotencia.',
+      title: 'Lección 1: Present Simple & Daily Routines (Rutinas y Hábitos)',
+      slug: 'present-simple-and-daily-routines',
+      summary: 'Aprende a describir hábitos, formular preguntas con Do/Does, y aplicar correctamente la tercera persona singular (-s/-es).',
       content: `
-# Métodos HTTP y Arquitectura Cliente-Servidor
+# Present Simple & Daily Routines
 
-El protocolo HTTP (Hypertext Transfer Protocol) es el estándar fundamental que permite la comunicación entre clientes (como navegadores web o aplicaciones móviles) y servidores.
+El **Present Simple** (presente simple) es el tiempo verbal fundamental en inglés para hablar sobre **hábitos, rutinas diarias, hechos generales y verdades universales**.
 
-## ¿Qué es una petición HTTP?
-Cuando un cliente necesita interactuar con un servidor, envía una solicitud o petición HTTP que contiene:
-- Un **Método o Verbo HTTP**: indica la acción que se desea realizar.
-- Una **URL (Uniform Resource Locator)**: especifica el recurso de destino.
-- **Cabeceras (Headers)**: metadatos sobre la petición (tipo de contenido, autenticación, etc.).
-- **Cuerpo (Body)**: datos enviados al servidor (opcional, típico en solicitudes de creación o actualización).
+## 1. Usos Principales
+- **Rutinas y hábitos:** *I drink coffee every morning.* (Bebo café todas las mañanas).
+- **Hechos permanentes:** *The sun rises in the east.* (El sol sale por el este).
+- **Horarios y programas:** *The train leaves at 8:00 AM.* (El tren sale a las 8:00 AM).
 
-## Métodos HTTP Principales
+## 2. Regla de la Tercera Persona Singular (He, She, It)
+En oraciones afirmativas, cuando el sujeto es **he**, **she** o **it**, el verbo principal debe modificarse:
+- Se añade **-s** a la mayoría de verbos: *work -> works*, *live -> lives*.
+- Si el verbo termina en *-ch, -sh, -ss, -x, -o*, se añade **-es**: *watch -> watches*, *go -> goes*, *do -> does*.
+- Si termina en consonante + *y*, cambia a **-ies**: *study -> studies*. Con vocal + *y*, solo se añade -s: *play -> plays*.
 
-### 1. GET
-El método GET se utiliza exclusivamente para **consultar y recuperar información** de un recurso sin modificar el estado del servidor.
-- **Seguro e Idempotente**: Realizar una petición GET varias veces siempre produce el mismo resultado y no produce efectos secundarios en el servidor.
-- No debe llevar cuerpo en la petición; los parámetros se envían en la cadena de consulta (query string).
+## 3. Preguntas con los Auxiliares DO y DOES
+Para formular preguntas en Present Simple, se utiliza el verbo auxiliar al inicio de la estructura:
+- **DO**: Se usa con los pronombres **I**, **you**, **we**, **they**.
+  - Ejemplo: *Do you speak English?* (¿Hablas inglés?)
+  - Ejemplo: *Where do you work?* (¿Dónde trabajas?)
+- **DOES**: Se usa exclusivamente con la tercera persona singular (**he**, **she**, **it**).
+  - Al usar *does*, el verbo principal vuelve a su **forma base (infinitivo sin to)**, sin agregarle 's'.
+  - Ejemplo: *Does she live in Madrid?* (¿Ella vive en Madrid?) — *Incorrecto: Does she lives...*
 
-### 2. ¿Para qué sirve POST?
-El método POST se utiliza para **enviar datos al servidor con el propósito de crear un nuevo recurso** o procesar información que genera cambios en el sistema.
-- Por ejemplo: registrar un nuevo usuario, crear una orden de compra o publicar un comentario.
-- Los datos viajan en el **cuerpo (body)** de la petición, habitualmente en formato JSON.
-- **No es idempotente**: si envías la misma petición POST dos veces consecutivas, el servidor creará dos recursos independientes (por ejemplo, dos usuarios duplicados o dos cobros).
-
-### 3. PUT vs PATCH
-- **PUT**: Reemplaza completamente un recurso existente con los nuevos datos suministrados.
-- **PATCH**: Aplica modificaciones parciales sobre un recurso sin sobrescribirlo por completo.
-
-### 4. DELETE
-Se utiliza para eliminar el recurso especificado en la URL. Es un método idempotente.
-
-## Resumen de Idempotencia
-Una operación es idempotente si la ejecución repetida de la misma no altera el resultado final en el servidor respecto a haberla ejecutado una sola vez. GET, PUT y DELETE son idempotentes; POST **no** lo es.
+## 4. Preguntas Frecuentes en Conversación
+- **«What do you do?»**: Significa *"¿A qué te dedicas?"* o *"¿Cuál es tu profesión?"*. Se responde: *I am a software engineer* o *I work as a teacher*. (No confundir con *What are you doing?* que significa "¿Qué estás haciendo ahora mismo?").
+- **«Where do you come from?»**: Significa *"¿De dónde eres?"*. Se responde: *I come from Spain* o *I am from Mexico*.
       `.trim(),
     },
   });
 
   const leccion2 = await prisma.lesson.create({
     data: {
-      id: 'lec_http_estados_02',
+      id: 'lec_ingles_past_vs_perfect_02',
       courseId: curso.id,
       order: 2,
-      title: 'Lección 2: Códigos de Estado y Principios REST',
-      slug: 'codigos-de-estado-y-rest',
-      summary: 'Descubre el significado de las respuestas HTTP según su familia numérica y las reglas básicas de diseño de APIs REST.',
+      title: 'Lección 2: Past Simple vs Present Perfect (Experiencias y Eventos Pasados)',
+      slug: 'past-simple-vs-present-perfect',
+      summary: 'Diferencia acciones concluidas en un tiempo definido (Past Simple) de experiencias de vida o acciones con relevancia presente (Present Perfect).',
       content: `
-# Códigos de Estado HTTP y Principios REST
+# Past Simple vs Present Perfect
 
-Cuando un servidor responde a una solicitud HTTP, incluye un código numérico de 3 dígitos denominado **HTTP Status Code**, que comunica de forma estandarizada el resultado de la operación.
+Uno de los desafíos más importantes para los hispanohablantes al aprender inglés es distinguir cuándo usar el **Past Simple** y cuándo el **Present Perfect**.
 
-## Familias de Códigos de Estado
+## 1. Past Simple: Acciones Terminadas en Tiempo Específico
+Se utiliza para acciones que **empezaron y terminaron en el pasado**, en un momento específico o conocido.
+- **Marcadores temporales típicos:** *yesterday*, *last week*, *in 2021*, *two days ago*, *when I was a child*.
+- **Estructura afirmativa:** Sujeto + Verbo en Pasado (*regular con -ed o irregular*).
+  - Regular: *I visited London in 2022.* (Visité Londres en 2022).
+  - Irregular: *She bought a new car yesterday.* (Ella compró un auto nuevo ayer).
+- **Negación y Pregunta con auxiliar DID:**
+  - *Did you go to the party?* (¿Fuiste a la fiesta?)
+  - *I did not (didn't) see that movie.* (No vi esa película).
 
-### 1xx: Informativos
-Indican que la petición fue recibida y el proceso continúa. Ejemplo: \`100 Continue\`.
+## 2. Present Perfect: Experiencias de Vida y Conexión con el Presente
+Se utiliza para hablar de **experiencias a lo largo de la vida**, acciones en un tiempo no específico, o acciones pasadas cuyos resultados tienen impacto en el presente.
+- **Estructura:** Sujeto + **have / has** + Verbo en **Past Participle** (participio pasado).
+  - *I have visited London three times.* (He visitado Londres tres veces — a lo largo de mi vida, no importa el año exacto).
+  - *She has lost her keys.* (Ha perdido sus llaves — y por eso ahora no puede entrar).
+- **Palabras clave:**
+  - **Ever:** Usado en preguntas para decir "¿Alguna vez...?": *Have you ever been to Japan?*
+  - **Never:** Para decir "Nunca": *I have never eaten sushi.*
+  - **Already:** Para acciones ya completadas antes de lo esperado: *I have already finished my homework.*
+  - **Yet:** En preguntas y negativas: *Have you called him yet?* / *I haven't called yet.*
+  - **Since / For:** *Since* indica el punto de inicio en el tiempo (*since 2018*), mientras que *for* indica la duración del período (*for five years*).
 
-### 2xx: Éxito (Success)
-Indican que la solicitud fue recibida, comprendida y aceptada satisfactoriamente.
-- **200 OK**: Solicitud exitosa genérica (habitual en GET o PUT).
-- **201 Created**: El recurso ha sido creado con éxito (respuesta estándar tras un POST exitoso).
-- **204 No Content**: La petición fue exitosa pero no hay contenido que devolver (frecuente en DELETE).
-
-### 3xx: Redirecciones
-Indican que el cliente debe tomar una acción adicional para completar la solicitud.
-- **301 Moved Permanently**: El recurso cambió de ubicación de forma definitiva.
-- **304 Not Modified**: Indica que el recurso no ha cambiado desde la última consulta en caché.
-
-### 4xx: Errores del Cliente
-Indican que la solicitud contiene un error imputable al cliente.
-- **400 Bad Request**: La sintaxis de la petición es inválida o faltan parámetros requeridos.
-- **401 Unauthorized**: Se requiere autenticación y no fue provista o es inválida.
-- **403 Forbidden**: El cliente está autenticado pero no tiene permisos para acceder al recurso.
-- **404 Not Found**: El recurso solicitado no existe en el servidor.
-- **422 Unprocessable Entity**: La sintaxis es correcta pero las reglas de negocio fallaron.
-
-### 5xx: Errores del Servidor
-Indican que el servidor falló al intentar procesar una solicitud aparentemente válida.
-- **500 Internal Server Error**: Error genérico inesperado en la aplicación del servidor.
-- **502 Bad Gateway**: El servidor actuando como proxy recibió una respuesta inválida del servidor aguas arriba.
-- **503 Service Unavailable**: El servidor no está disponible temporalmente por sobrecarga o mantenimiento.
+## 3. Regla de Oro para Decidir:
+Pregúntate: **¿Se menciona o importa el momento exacto en que ocurrió?**
+- Si **SÍ** se especifica cuándo ocurrió (*yesterday, in May, last year*): usa **Past Simple**.
+- Si **NO** se especifica cuándo o se habla de una experiencia de vida en general: usa **Present Perfect**.
       `.trim(),
     },
   });
@@ -151,7 +142,7 @@ Indican que el servidor falló al intentar procesar una solicitud aparentemente 
     },
   });
 
-  console.log(`Inscripción realizada: solo ${alumnoAutorizado.name} tiene acceso al curso.`);
+  console.log(`Inscripción realizada: solo ${alumnoAutorizado.name} tiene acceso.`);
   console.log(`El usuario ${alumnoSinAcceso.name} NO posee inscripción (debe recibir 403 Forbidden).`);
 
   // 5. Crear una conversación previa de demostración para el alumno autorizado
@@ -167,14 +158,14 @@ Indican que el servidor falló al intentar procesar una solicitud aparentemente 
       {
         conversationId: conversacionInicial.id,
         role: 'user',
-        content: '¿Para qué sirve POST?',
-        audioInputUsed: false,
+        content: '¿Cuándo debo usar "do" y cuándo "does" para hacer preguntas?',
+        audioInputUsed: true,
         createdAt: new Date(Date.now() - 1000 * 60 * 30),
       },
       {
         conversationId: conversacionInicial.id,
         role: 'assistant',
-        content: 'Según el material de esta lección, el método POST se utiliza para enviar datos al servidor con el propósito de crear un nuevo recurso o procesar información que genere cambios en el sistema (como registrar un usuario o publicar un comentario). A diferencia de GET, los datos viajan en el cuerpo (body) de la petición y no es idempotente.',
+        content: 'En Present Simple, la regla es la siguiente:\n\n- Usas **DO** con los pronombres **I**, **you**, **we**, y **they** (por ejemplo: *"Do you speak English?"* o *"Where do you work?"*).\n- Usas **DOES** exclusivamente para la tercera persona singular (**he**, **she**, **it**) (por ejemplo: *"Does she live in Madrid?"*).\n\nUn detalle clave del material: cuando utilizas el auxiliar *does*, el verbo principal vuelve a su forma base sin la letra "s" final.',
         audioInputUsed: false,
         createdAt: new Date(Date.now() - 1000 * 60 * 29),
       },
@@ -182,7 +173,7 @@ Indican que el servidor falló al intentar procesar una solicitud aparentemente 
   });
 
   console.log('Conversación de prueba precargada con éxito para verificar la continuidad.');
-  console.log('--- Semilla completada satisfactoriamente ---');
+  console.log('--- Semilla EdTech completada satisfactoriamente ---');
 }
 
 main()

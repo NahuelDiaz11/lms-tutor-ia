@@ -2,21 +2,20 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { db } from '../src/lib/db';
 import { checkCourseAccess, checkLessonAccess } from '../src/lib/auth';
 
-describe('Control de Acceso y Autorización LMS (Requerimientos 01, 02 y Seguridad IDOR)', () => {
+describe('Control de Acceso y Autorización LMS EdTech (Requerimientos 01, 02 y Seguridad IDOR)', () => {
   const ALUMNO_AUTORIZADO = 'usr_autorizado_01';
   const ALUMNO_SIN_ACCESO = 'usr_noautorizado_02';
-  const CURSO_ID = 'curso_apis_web_101';
-  const LECCION_1_ID = 'lec_http_metodos_01';
+  const CURSO_ID = 'curso_ingles_conversacional_101';
+  const LECCION_1_ID = 'lec_ingles_present_simple_01';
 
   beforeAll(async () => {
-    // Garantizar que la base de datos de pruebas cuente con los usuarios y matrícula inicial
     await db.user.upsert({
       where: { id: ALUMNO_AUTORIZADO },
       update: {},
       create: {
         id: ALUMNO_AUTORIZADO,
-        email: 'alumno.autorizado@lms.poc',
-        name: 'Ana Silva (Con Acceso)',
+        email: 'alumno.autorizado@edtech.poc',
+        name: 'Ana Silva (Con Acceso al Curso)',
       },
     });
 
@@ -25,8 +24,8 @@ describe('Control de Acceso y Autorización LMS (Requerimientos 01, 02 y Segurid
       update: {},
       create: {
         id: ALUMNO_SIN_ACCESO,
-        email: 'alumno.noautorizado@lms.poc',
-        name: 'Pedro Gómez (Sin Acceso)',
+        email: 'alumno.noautorizado@edtech.poc',
+        name: 'Pedro Gómez (Sin Acceso al Curso)',
       },
     });
 
@@ -35,9 +34,9 @@ describe('Control de Acceso y Autorización LMS (Requerimientos 01, 02 y Segurid
       update: {},
       create: {
         id: CURSO_ID,
-        title: 'Fundamentos de APIs Web',
-        slug: 'fundamentos-apis-web-test',
-        description: 'Curso de pruebas automatizadas',
+        title: 'Inglés Práctico: Comunicación y Estructuras Fundamentales (A2-B1)',
+        slug: 'ingles-practico-comunicacion',
+        description: 'Curso de inglés para pruebas automatizadas',
       },
     });
 
@@ -48,9 +47,9 @@ describe('Control de Acceso y Autorización LMS (Requerimientos 01, 02 y Segurid
         id: LECCION_1_ID,
         courseId: CURSO_ID,
         order: 1,
-        title: 'Lección 1: Métodos HTTP',
-        slug: 'leccion-1-metodos',
-        content: 'Contenido de prueba sobre POST y GET.',
+        title: 'Lección 1: Present Simple & Daily Routines',
+        slug: 'present-simple-routines',
+        content: 'Contenido de prueba sobre Do/Does y rutinas.',
       },
     });
 
@@ -92,11 +91,11 @@ describe('Control de Acceso y Autorización LMS (Requerimientos 01, 02 y Segurid
     expect(hasAccess).toBe(false);
   });
 
-  it('el alumno autorizado puede acceder a la lección del curso', async () => {
+  it('el alumno autorizado puede acceder a la lección de inglés del curso', async () => {
     const result = await checkLessonAccess(ALUMNO_AUTORIZADO, LECCION_1_ID);
     expect(result.hasAccess).toBe(true);
     expect(result.lesson).toBeDefined();
-    expect(result.lesson?.title).toContain('Lección 1: Métodos HTTP');
+    expect(result.lesson?.title).toContain('Lección 1');
   });
 
   it('el alumno sin acceso recibe hasAccess=false al consultar la lección (previene IDOR)', async () => {

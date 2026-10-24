@@ -1,7 +1,8 @@
 /**
- * Mock AI Provider para evaluación técnica offline / sin consumo de servicios pagos.
- * Analiza el contenido de la lección frente a la pregunta del alumno.
- * Si la información no está en el contenido, devuelve explícitamente el mensaje de insuficiencia.
+ * Mock AI Provider especializado en EdTech para Aprendizaje de Inglés.
+ * Responde dudas gramaticales, de vocabulario y conversación basándose EXCLUSIVAMENTE
+ * en el material de la lección activa. Si la pregunta busca temas no incluidos,
+ * devuelve explícitamente el mensaje de insuficiencia de información.
  */
 
 export interface AIProviderResponse {
@@ -17,134 +18,117 @@ export class MockAIProvider {
     studentQuestion: string,
     conversationHistory: { role: string; content: string }[] = []
   ): Promise<AIProviderResponse> {
-    // Simular una pequeña latencia natural para feedback visual de UI (300ms)
+    // Simular pequeña latencia natural para feedback visual de UI (350ms)
     await new Promise((resolve) => setTimeout(resolve, 350));
 
     const cleanQuestion = studentQuestion.toLowerCase().trim();
     const cleanContent = lessonContent.toLowerCase();
 
-    // Palabras clave normalizadas para evaluar relevancia contextual
+    // Palabras vacías en español e inglés
     const stopWords = new Set([
       'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
       'de', 'del', 'a', 'al', 'en', 'para', 'por', 'con', 'sin',
       'que', 'qué', 'como', 'cómo', 'cual', 'cuál', 'es', 'son',
       'sirve', 'hace', 'significa', 'diferencia', 'entre', 'me', 'puedes', 'explicar',
-      'hola', 'buenos', 'días', 'tardes', 'gracias'
+      'the', 'is', 'are', 'in', 'at', 'on', 'how', 'what', 'why', 'when', 'can', 'you'
     ]);
 
     const questionKeywords = cleanQuestion
-      .replace(/[¿?¡!.,;:]/g, ' ')
+      .replace(/[¿?¡!.,;:"']/g, ' ')
       .split(/\s+/)
       .filter((word) => word.length > 2 && !stopWords.has(word));
 
-    // Determinar si hay coincidencia relevante con el contenido de la lección
     const matchingKeywords = questionKeywords.filter((kw) => cleanContent.includes(kw));
 
-    // Caso de saludos simples de cortesía
-    if (/^(hola|buenos días|buenas tardes|saludos)/i.test(cleanQuestion) && questionKeywords.length <= 1) {
+    // Saludos de cortesía
+    if (/^(hola|hello|hi|good morning|good afternoon|buenos días|buenas tardes)/i.test(cleanQuestion) && questionKeywords.length <= 2) {
       return {
-        answer: `¡Hola! Soy tu tutor virtual para la lección "${lessonTitle}". ¿Tienes alguna duda sobre los conceptos explicados en este material? Por ejemplo, puedes preguntarme sobre los métodos HTTP o códigos de respuesta.`,
+        answer: `Hello! I am your AI English tutor for "${lessonTitle}". ¿Tienes alguna duda sobre las reglas gramaticales, ejemplos o vocabulario de esta lección? Puedes preguntarme por texto o usando tu micrófono.`,
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    // Regla estricta: Si ninguna palabra clave relevante coincide con el material de la lección
-    if (matchingKeywords.length === 0) {
+    // Preguntas sobre DO y DOES
+    if ((cleanQuestion.includes('do') && cleanQuestion.includes('does')) || cleanQuestion.includes('auxiliar')) {
       return {
-        answer: 'No dispongo de información suficiente en el contenido de esta lección para responder a tu pregunta. Te sugiero consultar las demás lecciones del curso o el material complementario.',
-        isContextual: false,
-        providerUsed: 'mock (offline)',
+        answer: 'De acuerdo con el material de la lección, la regla para preguntas en Present Simple es:\n\n- Usas **DO** con los pronombres **I, you, we, they** (ej: *"Do you speak English?"* o *"Where do you work?"*).\n- Usas **DOES** exclusivamente para la tercera persona singular (**he, she, it**) (ej: *"Does she live in Madrid?"*).\n\n⚠️ **Regla clave del texto:** Al usar *does*, el verbo principal vuelve a su forma base sin la "s" final.',
+        isContextual: true,
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    // Búsqueda de secciones específicas dentro del contenido de la lección
-    // Ejemplo clave del PDF: "¿Para qué sirve POST?"
-    if (cleanQuestion.includes('post')) {
+    // Pregunta sobre "¿Qué significa 'What do you do'?"
+    if (cleanQuestion.includes('what do you do') || cleanQuestion.includes('a qué te dedicas') || cleanQuestion.includes('profesión')) {
       return {
-        answer: 'De acuerdo con el material de esta lección, el método **POST** se utiliza para enviar datos al servidor con el propósito de crear un nuevo recurso o procesar información que genere cambios en el sistema (por ejemplo, registrar un usuario o publicar un comentario).\n\nA diferencia de GET, los datos viajan en el cuerpo (*body*) de la petición en formatos como JSON, y **no es idempotente**: si envías dos veces consecutivas la misma petición POST, se crearán dos recursos independientes.',
+        answer: 'La lección explica que la expresión **«What do you do?»** se traduce como *"¿A qué te dedicas?"* o *"¿Cuál es tu profesión?"*. Se responde habitualmente diciendo tu ocupación (ej: *"I am a software engineer"* o *"I work as a teacher"*).\n\nTen cuidado de no confundirla con *What are you doing?*, que significa "¿Qué estás haciendo en este instante?".',
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    if (cleanQuestion.includes('get')) {
+    // Regla de tercera persona singular (-s / -es / -ies)
+    if (cleanQuestion.includes('tercera persona') || cleanQuestion.includes('-s') || cleanQuestion.includes('-es') || cleanQuestion.includes('he, she') || cleanQuestion.includes('singular')) {
       return {
-        answer: 'Según la lección, el método **GET** se utiliza exclusivamente para consultar y recuperar información de un recurso sin alterar el estado del servidor. Es un método seguro e **idempotente** (repetir la petición produce el mismo resultado sin efectos secundarios) y sus parámetros viajan en la URL (*query string*), no en el cuerpo.',
+        answer: 'En la lección se detalla que en oraciones afirmativas con **he, she, it** el verbo cambia:\n\n- Se añade **-s** a la mayoría de verbos (*work -> works*).\n- Si termina en *-ch, -sh, -ss, -x, -o*, se añade **-es** (*watch -> watches*, *go -> goes*, *do -> does*).\n- Si termina en consonante + *y*, cambia a **-ies** (*study -> studies*).\n\nCon *I, you, we, they* el verbo se mantiene en su forma base sin cambios.',
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    if (cleanQuestion.includes('idempotenc') || cleanQuestion.includes('idempotente')) {
+    // Rutinas y usos de Present Simple
+    if (cleanQuestion.includes('rutina') || cleanQuestion.includes('hábito') || cleanQuestion.includes('present simple') || cleanQuestion.includes('usos')) {
       return {
-        answer: 'La lección explica que una operación es **idempotente** cuando la ejecución repetida de la misma no altera el resultado final en el servidor con respecto a haberla ejecutado una sola vez. Los métodos GET, PUT y DELETE son idempotentes; en cambio, POST no lo es.',
+        answer: 'Según el contenido de la lección, el **Present Simple** se utiliza para tres propósitos principales:\n\n1. **Hábitos y rutinas:** Acciones recurrentes (ej: *"I drink coffee every morning"*).\n2. **Hechos permanentes y verdades universales:** (ej: *"The sun rises in the east"*).\n3. **Horarios programados:** (ej: *"The train leaves at 8:00 AM"*).',
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    if (cleanQuestion.includes('put') || cleanQuestion.includes('patch')) {
+    // --- LECCIÓN 2: PAST SIMPLE VS PRESENT PERFECT ---
+
+    // Diferencia entre Past Simple y Present Perfect
+    if ((cleanQuestion.includes('past') && cleanQuestion.includes('perfect')) || cleanQuestion.includes('diferencia entre pasado')) {
       return {
-        answer: 'En el material se establece que **PUT** reemplaza completamente un recurso existente con los nuevos datos enviados, mientras que **PATCH** se utiliza para aplicar modificaciones parciales sobre un recurso sin sobrescribirlo por completo.',
+        answer: 'La regla de oro explicada en la lección es preguntarse: **¿Se menciona o importa el momento exacto en que ocurrió?**\n\n- Usa **Past Simple** cuando la acción empezó y terminó en un momento específico o conocido del pasado (con marcadores como *yesterday, in 2021, last week*).\n- Usa **Present Perfect** cuando hablas de una experiencia a lo largo de tu vida sin un año o fecha fija, o cuando la acción pasada tiene consecuencias directas en tu presente (ej: *"I have visited London three times"*).',
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    if (cleanQuestion.includes('delete')) {
+    // Since y For
+    if (cleanQuestion.includes('since') || cleanQuestion.includes('for')) {
       return {
-        answer: 'El método **DELETE** se utiliza para eliminar el recurso especificado en la URL de destino y, según el material, se trata de una operación idempotente.',
+        answer: 'En el material de la Lección 2 se indica la distinción:\n\n- **Since:** Señala el punto o momento exacto de inicio en el tiempo (ej: *"since 2018"*, *"since Monday"*).\n- **For:** Expresa la duración del período de tiempo transcurrido (ej: *"for five years"*, *"for two hours"*).',
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    if (cleanQuestion.includes('404')) {
+    // Ever y Never
+    if (cleanQuestion.includes('ever') || cleanQuestion.includes('never')) {
       return {
-        answer: 'El código **404 Not Found** pertenece a la familia 4xx (errores del cliente) e indica que el recurso solicitado no existe en el servidor.',
+        answer: 'Según la lección sobre Present Perfect:\n\n- **Ever:** Se usa en preguntas para indagar sobre experiencias de vida («¿Alguna vez...?»), por ejemplo: *"Have you ever been to Japan?"*.\n- **Never:** Se utiliza para indicar que una experiencia nunca ha ocurrido: *"I have never eaten sushi"*.\n\nAmbas estructuras van acompañadas del verbo en Past Participle (participio).',
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    if (cleanQuestion.includes('201') || (cleanQuestion.includes('created') && cleanQuestion.includes('código'))) {
+    // Already y Yet
+    if (cleanQuestion.includes('already') || cleanQuestion.includes('yet')) {
       return {
-        answer: 'El código **201 Created** pertenece a la familia 2xx e indica que la solicitud fue procesada y el recurso se creó con éxito. Es la respuesta habitual y recomendada tras una petición POST exitosa.',
+        answer: 'El material establece que:\n\n- **Already:** Se usa en oraciones afirmativas para acciones completadas antes de lo esperado (*"I have already finished my homework"*).\n- **Yet:** Se usa al final de preguntas o negaciones para acciones que se esperan (*"Have you called him yet?"* / *"I have not called yet"*).',
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
-    if (cleanQuestion.includes('200') || cleanQuestion.includes('2xx')) {
+    // Marcadores temporales de Past Simple
+    if (cleanQuestion.includes('yesterday') || cleanQuestion.includes('last week') || cleanQuestion.includes('marcador') || cleanQuestion.includes('did')) {
       return {
-        answer: 'La familia **2xx** indica éxito (solicitud recibida, comprendida y aceptada). El código **200 OK** es la respuesta exitosa estándar y genérica para operaciones GET o PUT.',
+        answer: 'El **Past Simple** utiliza marcadores temporales concluidos como *yesterday*, *last week*, *in 2021*, *two days ago* o *when I was a child*. Para preguntas y oraciones negativas se utiliza el auxiliar **DID** (ej: *"Did you go to the party?"* / *"I did not see that movie"*).',
         isContextual: true,
-        providerUsed: 'mock (offline)',
-      };
-    }
-
-    if (cleanQuestion.includes('403') || cleanQuestion.includes('forbidden')) {
-      return {
-        answer: 'El código **403 Forbidden** indica que el cliente está autenticado pero no posee los permisos necesarios para acceder al recurso solicitado.',
-        isContextual: true,
-        providerUsed: 'mock (offline)',
-      };
-    }
-
-    if (cleanQuestion.includes('401') || cleanQuestion.includes('unauthorized')) {
-      return {
-        answer: 'El código **401 Unauthorized** indica que se requiere autenticación y la misma no fue suministrada o no es válida.',
-        isContextual: true,
-        providerUsed: 'mock (offline)',
-      };
-    }
-
-    if (cleanQuestion.includes('500') || cleanQuestion.includes('5xx')) {
-      return {
-        answer: 'La familia **5xx** agrupa los errores del servidor. En particular, **500 Internal Server Error** señala un fallo genérico e inesperado en la aplicación del servidor al procesar la petición.',
-        isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
@@ -162,14 +146,14 @@ export class MockAIProvider {
       return {
         answer: `Basándome en el material de "${lessonTitle}":\n\n${cleanSnippet}`,
         isContextual: true,
-        providerUsed: 'mock (offline)',
+        providerUsed: 'EdTech Mock AI (offline)',
       };
     }
 
     return {
       answer: 'No dispongo de información suficiente en el contenido de esta lección para responder a tu pregunta. Te sugiero consultar las demás lecciones del curso o el material complementario.',
       isContextual: false,
-      providerUsed: 'mock (offline)',
+      providerUsed: 'EdTech Mock AI (offline)',
     };
   }
 }

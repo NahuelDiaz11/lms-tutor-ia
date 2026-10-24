@@ -66,12 +66,12 @@ export default function Navbar() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-900 tracking-tight text-lg">LMS Educa</span>
+              <span className="font-bold text-slate-900 tracking-tight text-lg">LinguaLearn AI</span>
               <span className="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200/60 font-medium px-2 py-0.5 rounded-full flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> POC Tutor IA
+                <Sparkles className="w-3 h-3" /> EdTech Inglés
               </span>
             </div>
-            <p className="text-xs text-slate-500 hidden sm:block">Plataforma de Aprendizaje con Asistente por Voz</p>
+            <p className="text-xs text-slate-500 hidden sm:block">Plataforma de Aprendizaje de Inglés con Tutor de Voz</p>
           </div>
         </Link>
 

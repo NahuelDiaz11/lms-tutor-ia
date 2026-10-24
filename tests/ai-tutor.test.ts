@@ -1,46 +1,56 @@
 import { describe, it, expect } from 'vitest';
 import { MockAIProvider } from '../src/lib/ai/mock-provider';
 
-describe('Tutor de IA Contextual (Alcance Funcional 03)', () => {
-  const lessonTitle = 'Lección 1: Métodos HTTP y Arquitectura Cliente-Servidor';
+describe('Tutor de IA Contextual para EdTech Inglés (Alcance Funcional 03)', () => {
+  const lessonTitle = 'Lección 1: Present Simple & Daily Routines (Rutinas y Hábitos)';
   const lessonContent = `
-# Métodos HTTP y Arquitectura Cliente-Servidor
-El protocolo HTTP es el estándar fundamental que permite la comunicación.
+# Present Simple & Daily Routines
+El Present Simple se utiliza para hábitos, rutinas y hechos permanentes.
 
-### 2. ¿Para qué sirve POST?
-El método POST se utiliza para enviar datos al servidor con el propósito de crear un nuevo recurso o procesar información que genera cambios en el sistema.
-Los datos viajan en el cuerpo (body) de la petición, habitualmente en formato JSON.
-No es idempotente: si envías la misma petición POST dos veces consecutivas, el servidor creará dos recursos independientes.
+## Regla de la Tercera Persona Singular (He, She, It)
+Se añade -s a la mayoría de verbos (work -> works).
+Si termina en -ch, -sh, -ss, -x, -o, se añade -es (watch -> watches, do -> does).
 
-### 1. GET
-El método GET se utiliza exclusivamente para consultar y recuperar información sin modificar el estado del servidor. Es seguro e idempotente.
+## Preguntas con los Auxiliares DO y DOES
+- DO: Se usa con I, you, we, they. Ejemplo: Do you speak English?
+- DOES: Se usa con he, she, it. Al usar does, el verbo vuelve a su forma base. Ejemplo: Does she live in Madrid?
+
+## Preguntas Frecuentes
+- «What do you do?»: Significa "¿A qué te dedicas?" o "¿Cuál es tu profesión?".
   `.trim();
 
-  it('debe responder con precisión a la pregunta clave del enunciado: "¿Para qué sirve POST?"', async () => {
-    const question = '¿Para qué sirve POST?';
+  it('debe responder adecuadamente a preguntas sobre cuándo usar DO y cuándo DOES', async () => {
+    const question = '¿Cuándo debo usar "do" y cuándo "does" para hacer preguntas?';
     const response = await MockAIProvider.generateAnswer(lessonTitle, lessonContent, question);
 
     expect(response.isContextual).toBe(true);
-    expect(response.answer.toLowerCase()).toContain('crear un nuevo recurso');
-    expect(response.answer.toLowerCase()).toContain('cuerpo');
-    expect(response.answer.toLowerCase()).toContain('no es idempotente');
+    expect(response.answer.toLowerCase()).toContain('tercera persona');
+    expect(response.answer.toLowerCase()).toContain('forma base');
   });
 
-  it('debe responder sobre el método GET basándose en el contenido de la lección', async () => {
-    const question = '¿Qué características tiene GET y es idempotente?';
+  it('debe explicar el significado de la expresión común "What do you do?"', async () => {
+    const question = '¿Qué significa la frase "What do you do?" y cómo se responde?';
     const response = await MockAIProvider.generateAnswer(lessonTitle, lessonContent, question);
 
     expect(response.isContextual).toBe(true);
-    expect(response.answer.toLowerCase()).toContain('recuperar información');
-    expect(response.answer.toLowerCase()).toContain('idempotente');
+    expect(response.answer.toLowerCase()).toContain('profesión');
+    expect(response.answer.toLowerCase()).toContain('dedicas');
+  });
+
+  it('debe explicar la regla de la tercera persona singular (-s / -es)', async () => {
+    const question = '¿Por qué se agrega -s o -es en tercera persona en Present Simple?';
+    const response = await MockAIProvider.generateAnswer(lessonTitle, lessonContent, question);
+
+    expect(response.isContextual).toBe(true);
+    expect(response.answer.toLowerCase()).toContain('he, she, it');
   });
 
   it('debe indicar explícitamente insuficiencia de información ante preguntas fuera del contenido de la lección', async () => {
     const outOfContextQuestions = [
-      '¿Cómo se cocina una paella valenciana?',
-      '¿Cuál es la distancia entre la Tierra y la Luna?',
-      '¿Qué funciones trigonométricas se usan en gráficos 3D?',
-      '¿Cómo configuro un clúster de Kubernetes en AWS?',
+      '¿Cómo se cocina un asado argentino?',
+      '¿Cuál es la distancia entre la Tierra y el Sol?',
+      '¿Cómo programo una red neuronal en Python?',
+      '¿Qué tipos de cambio aplican en Wall Street?',
     ];
 
     for (const q of outOfContextQuestions) {

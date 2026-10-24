@@ -72,13 +72,13 @@ export default function HomePage() {
 
         <div className="max-w-3xl relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-semibold mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Prueba de Concepto (POC) &bull; LMS Asistido por IA y Voz
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" /> EdTech LMS &bull; Tutor Virtual de Inglés con Voz
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">
-            Aprende con tu Tutor Virtual Interactivo
+            Domina el Inglés con tu Tutor de IA por Voz
           </h1>
           <p className="text-sm sm:text-base text-indigo-100/90 leading-relaxed mb-6">
-            Plataforma demostrativa con delimitación de contexto estricta, transcripción por voz en tiempo real, síntesis de audio y control de accesos seguro contra vulnerabilidades IDOR.
+            Plataforma EdTech especializada en el aprendizaje de idiomas. Practica tu *speaking* y *listening* con interacción por voz en tiempo real, delimitación pedagógica estricta y control de acceso seguro.
           </p>
 
           {/* Guía Rápida para el Evaluador */}
@@ -89,7 +89,7 @@ export default function HomePage() {
             <ul className="grid sm:grid-cols-2 gap-2.5 pt-1 text-indigo-100">
               <li className="flex items-start gap-2">
                 <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">1</span>
-                <span><strong>Con acceso (Ana):</strong> Ingresa a la lección, formula preguntas por voz o texto (ej. <em>«¿Para qué sirve POST?»</em>) y escucha la respuesta.</span>
+                <span><strong>Con acceso (Ana):</strong> Ingresa a la lección de inglés, formula preguntas por voz o texto (ej. <em>«¿Cuándo uso "do" y cuándo "does"?»</em>) y escucha la respuesta.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">2</span>

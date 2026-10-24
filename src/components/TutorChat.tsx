@@ -249,19 +249,25 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
             <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-3">
               <Bot className="w-6 h-6" />
             </div>
-            <h3 className="font-semibold text-slate-800 text-sm mb-1">Inicia una consulta con el Tutor</h3>
+            <h3 className="font-semibold text-slate-800 text-sm mb-1">Inicia tu práctica con el Tutor de Inglés</h3>
             <p className="text-xs text-slate-500 mb-4 leading-relaxed">
-              Puedes hacer preguntas escribiendo o grabando tu voz con el micrófono. El tutor responderá con base exclusiva en este material.
+              Puedes preguntar por texto o practicar tu pronunciación con el micrófono. El tutor te asistirá basándose exclusivamente en este contenido.
             </p>
-            <div className="bg-white p-3 rounded-xl border border-slate-200 text-left w-full shadow-xs">
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
-                Ejemplo sugerido:
+            <div className="bg-white p-3 rounded-xl border border-slate-200 text-left w-full shadow-xs space-y-2">
+              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                Preguntas recomendadas para esta lección:
               </span>
               <button
-                onClick={() => setInputQuestion('¿Para qué sirve POST?')}
+                onClick={() => setInputQuestion('¿Cuándo debo usar "do" y cuándo "does"?')}
                 className="text-xs text-indigo-600 font-medium hover:underline text-left block"
               >
-                &laquo;¿Para qué sirve POST?&raquo;
+                &laquo;¿Cuándo debo usar "do" y cuándo "does"?&raquo;
+              </button>
+              <button
+                onClick={() => setInputQuestion('¿Qué significa "What do you do" y cómo respondo?')}
+                className="text-xs text-indigo-600 font-medium hover:underline text-left block"
+              >
+                &laquo;¿Qué significa "What do you do"?&raquo;
               </button>
             </div>
           </div>
