@@ -109,40 +109,62 @@ export default function HomePage() {
       </div>
 
       {/* Estado del Alumno Activo */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
-              isAuthorized
-                ? 'bg-emerald-100 text-emerald-700'
-                : 'bg-rose-100 text-rose-700'
-            }`}
-          >
-            <Users className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500 font-medium">Sesión del Alumno:</span>
-              <span
-                className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
-                  isAuthorized
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                    : 'bg-rose-100 text-rose-800 border border-rose-200'
-                }`}
-              >
-                {isAuthorized ? 'Acceso Autorizado' : 'Sin Acceso al Curso'}
-              </span>
+      {currentUser ? (
+        <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                isAuthorized
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-rose-100 text-rose-700'
+              }`}
+            >
+              <Users className="w-6 h-6" />
             </div>
-            <h2 className="text-base font-bold text-slate-900 mt-0.5">
-              {currentUser?.name || 'Cargando usuario...'} ({currentUser?.email})
-            </h2>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-500 font-medium">Sesión del Alumno:</span>
+                <span
+                  className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
+                    isAuthorized
+                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                      : 'bg-rose-100 text-rose-800 border border-rose-200'
+                  }`}
+                >
+                  {isAuthorized ? 'Acceso Autorizado' : 'Sin Acceso al Curso'}
+                </span>
+              </div>
+              <h2 className="text-base font-bold text-slate-900 mt-0.5">
+                {currentUser.name} ({currentUser.email})
+              </h2>
+            </div>
+          </div>
+
+          <div className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2">
+            Usa los botones superiores <strong>&laquo;Con Acceso&raquo;</strong> o <strong>&laquo;Sin Acceso&raquo;</strong> para conmutar de perfil en tiempo real.
           </div>
         </div>
-
-        <div className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2">
-          Usa los botones superiores <strong>&laquo;Alumno Con Acceso&raquo;</strong> o <strong>&laquo;Alumno Sin Acceso&raquo;</strong> para conmutar de perfil en tiempo real.
+      ) : (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+              <Users className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-amber-950">No has iniciado sesión</h3>
+              <p className="text-xs text-amber-800 mt-0.5">
+                Inicia sesión con una de las dos cuentas de prueba para evaluar el tutor y los controles de acceso.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/login"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs shadow-sm transition shrink-0"
+          >
+            Ir a Iniciar Sesión <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
-      </div>
+      )}
 
       {/* Catálogo de Cursos */}
       <div>

@@ -19,12 +19,26 @@ El propósito de la POC es validar de forma demostrable, comprensible y acotada 
   * Facilita al evaluador la puesta en marcha con un solo comando (`npm run dev` o `docker compose up`), eliminando la complejidad de levantar servidores separados de backend y frontend o resolver problemas de CORS.
   * El uso estricto de TypeScript en todo el ciclo (frontend, API routes, servicios y base de datos) minimiza errores en tiempo de ejecución.
 
-### 2.2. Base de Datos y Persistencia: SQLite + Prisma ORM
-* **Decisión:** Uso de SQLite administrado a través de Prisma ORM.
-* **Justificación:**
-  * No requiere instalar servicios de base de datos pesados (PostgreSQL/MySQL/Redis) en la máquina del evaluador.
-  * Mediante el script `seed.mjs`, se inicializa automáticamente la base de datos con los dos perfiles de prueba requeridos (alumno con acceso y alumno sin acceso), el curso y las lecciones.
-  * Provee consultas fuertemente tipadas y protección contra inyecciones SQL (*SQL Injection*).
+### 2.2. Base de Datos y Modelo Relacional Eficiente: SQLite + Prisma ORM
+* **Decisión:** Modelado relacional normalizado con tabla de enlace de matrículas:
+  * `User`: Información del alumno (`id`, `email`, `password`, `name`, `role`).
+  * `Course`: Catálogo de cursos (`id`, `title`, `slug`, `description`).
+  * `Enrollment`: Tabla intermedia que relaciona `User` N:M `Course` mediante clave única compuesta `@@unique([userId, courseId])`.
+  * `Lesson`: Lecciones pertenecientes a un curso (`courseId`).
+  * `Conversation` y `Message`: Diálogos persistidos por alumno y lección (`userId`, `lessonId`).
+* **Justificación de Eficiencia:**
+  * **Relación N:M Escalable:** En plataformas EdTech, vincular usuarios directamente a cursos mediante una tabla `Enrollment` es el estándar de la industria. Permite que un alumno se inscriba en múltiples cursos y que un curso tenga miles de estudiantes sin redundancia de datos.
+  * **Verificación de Acceso en Tiempo Constante O(1):** La clave compuesta `userId_courseId` crea un índice B-tree único en SQLite, permitiendo comprobar si un usuario tiene acceso al curso en microsegundos y blindando el sistema contra ataques IDOR (*Insecure Direct Object References*).
+  * **Cero Configuración para el Evaluador:** Mediante SQLite y el script `seed.mjs`, la base de datos se inicializa automáticamente sin necesidad de instalar servicios externos pesados (PostgreSQL/MySQL/Redis).
+
+### 2.3. Sistema de Login y Autenticación de Dos Alumnos
+* **Decisión:** Pantalla de Login dedicada (`/login`) con autenticación por credenciales (email + contraseña) y tarjetas de acceso rápido demostrativo.
+* **Perfiles de Prueba:**
+  * **Ana Silva (Con Acceso):** `alumno.autorizado@edtech.poc` / `password123` (inscrita en el curso de inglés).
+  * **Pedro Gómez (Sin Acceso):** `alumno.noautorizado@edtech.poc` / `password123` (sin matrícula en el curso, para validar el bloqueo HTTP 403 Forbidden).
+* **Sesiones Seguras:**
+  * Al autenticarse, el servidor expide una cookie HTTP-Only segura (`poc_lms_user_id`) con política `SameSite: Lax`, protegiendo la sesión contra robo de tokens por scripts del lado del cliente (XSS).
+  * El usuario dispone de opción de *Cerrar Sesión* (Logout) y conmutación de cuentas en tiempo real en la barra de navegación para agilizar la revisión.
 
 ### 2.3. Interacción por Voz (STT y TTS): Web Speech API Nativa
 * **Decisión:** Implementación mediante la **Web Speech API** del navegador (`SpeechRecognition` para Speech-to-Text y `SpeechSynthesis` para Text-to-Speech).

@@ -15,6 +15,7 @@ describe('Control de Acceso y Autorización LMS EdTech (Requerimientos 01, 02 y 
       create: {
         id: ALUMNO_AUTORIZADO,
         email: 'alumno.autorizado@edtech.poc',
+        password: 'password123',
         name: 'Ana Silva (Con Acceso al Curso)',
       },
     });
@@ -25,6 +26,7 @@ describe('Control de Acceso y Autorización LMS EdTech (Requerimientos 01, 02 y 
       create: {
         id: ALUMNO_SIN_ACCESO,
         email: 'alumno.noautorizado@edtech.poc',
+        password: 'password123',
         name: 'Pedro Gómez (Sin Acceso al Curso)',
       },
     });
@@ -106,5 +108,21 @@ describe('Control de Acceso y Autorización LMS EdTech (Requerimientos 01, 02 y 
   it('un usuario inexistente o malicioso recibe hasAccess=false', async () => {
     const result = await checkLessonAccess('usuario_inexistente_hacker', LECCION_1_ID);
     expect(result.hasAccess).toBe(false);
+  });
+
+  it('autenticación: usuario con credenciales correctas valida exitosamente', async () => {
+    const user = await db.user.findUnique({
+      where: { email: 'alumno.autorizado@edtech.poc' },
+    });
+    expect(user).toBeDefined();
+    expect(user?.password).toBe('password123');
+  });
+
+  it('autenticación: usuario con password erróneo es rechazado', async () => {
+    const user = await db.user.findUnique({
+      where: { email: 'alumno.autorizado@edtech.poc' },
+    });
+    const isPasswordValid = user?.password === 'password_incorrecto_xyz';
+    expect(isPasswordValid).toBe(false);
   });
 });

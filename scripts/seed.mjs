@@ -18,6 +18,7 @@ async function main() {
     data: {
       id: 'usr_autorizado_01',
       email: 'alumno.autorizado@edtech.poc',
+      password: 'password123',
       name: 'Ana Silva (Con Acceso al Curso)',
       role: 'STUDENT',
     },
@@ -27,6 +28,7 @@ async function main() {
     data: {
       id: 'usr_noautorizado_02',
       email: 'alumno.noautorizado@edtech.poc',
+      password: 'password123',
       name: 'Pedro Gómez (Sin Acceso al Curso)',
       role: 'STUDENT',
     },

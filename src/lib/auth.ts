@@ -23,7 +23,7 @@ export async function getSessionUser(req?: NextRequest): Promise<AuthUser | null
   }
 
   if (!userId) {
-    userId = DEFAULT_USER_ID;
+    return null;
   }
 
   const user = await db.user.findUnique({
