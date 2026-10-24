@@ -1,0 +1,36 @@
+name: CI Verificación Continua POC LMS
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del Repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar Dependencias
+        run: npm ci
+
+      - name: Generar Cliente Prisma y Base de Datos SQLite
+        run: |
+          npx prisma generate
+          npx prisma db push
+          node scripts/seed.mjs
+
+      - name: Ejecutar Pruebas Automatizadas (Vitest)
+        run: npm test
+
+      - name: Compilar Proyecto (Next.js Build)
+        run: npm run build

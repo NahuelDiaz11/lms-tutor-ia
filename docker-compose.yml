@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  poc-lms:
+    build: .
+    container_name: poc-lms-tutor-ia
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:./dev.db
+      - AI_PROVIDER=mock
+    restart: unless-stopped
