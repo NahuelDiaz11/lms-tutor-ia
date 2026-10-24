@@ -141,7 +141,7 @@ export default function LessonDetailPage() {
         <p className="text-xs text-slate-500 mb-6">{errorMessage || 'No fue posible cargar el recurso.'}</p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-xl"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#071D3F] hover:bg-[#071D3F]/90 text-white text-xs font-semibold rounded-xl"
         >
           <ArrowLeft className="w-4 h-4" /> Volver al catálogo de cursos
         </Link>
@@ -154,13 +154,13 @@ export default function LessonDetailPage() {
       {/* Breadcrumb & Navigation */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2 text-xs text-slate-500">
-          <Link href="/" className="hover:text-indigo-600 font-medium flex items-center gap-1">
+          <Link href="/" className="hover:text-[#EB0202] font-medium flex items-center gap-1 transition">
             <ArrowLeft className="w-3.5 h-3.5" /> Inicio
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-slate-700 font-medium truncate max-w-[200px]">{course?.title}</span>
+          <span className="text-[#071D3F] font-medium truncate max-w-[200px]">{course?.title}</span>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-indigo-600 font-semibold">{lesson.title}</span>
+          <span className="text-[#EB0202] font-bold">{lesson.title}</span>
         </div>
 
         {/* Lecciones hermanas para navegación rápida */}
@@ -169,10 +169,10 @@ export default function LessonDetailPage() {
             <Link
               key={l.id}
               href={`/lessons/${l.id}`}
-              className={`text-xs px-3 py-1 rounded-lg font-medium transition ${
+              className={`text-xs px-3 py-1.5 rounded-lg font-medium transition ${
                 l.id === lesson.id
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                  ? 'bg-[#071D3F] text-white shadow-xs'
+                  : 'bg-white border border-slate-200 text-[#071D3F] hover:border-[#EB0202]'
               }`}
             >
               Lección {l.order}
@@ -186,24 +186,24 @@ export default function LessonDetailPage() {
         {/* Contenido de la Lección (7 cols) */}
         <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 uppercase tracking-wide">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-red-50 text-[#EB0202] border border-[#EB0202]/30 uppercase tracking-wide">
               Lección {lesson.order}
             </span>
-            <span className="text-xs text-slate-400">&bull; Material Oficial del Curso</span>
+            <span className="text-xs text-slate-400">&bull; Material Oficial de Class-Edtech</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-6">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#071D3F] tracking-tight mb-6">
             {lesson.title}
           </h1>
 
           {/* Renderizado del texto de la lección con estilo pedagógico */}
-          <div className="prose prose-slate max-w-none text-slate-700 text-sm sm:text-base leading-relaxed space-y-4">
+          <div className="prose prose-slate max-w-none text-[#071D3F] text-sm sm:text-base leading-relaxed space-y-4">
             {lesson.content.split('\n\n').map((paragraph, idx) => {
               const trimmed = paragraph.trim();
 
               if (trimmed.startsWith('# ')) {
                 return (
-                  <h2 key={idx} className="text-xl sm:text-2xl font-bold text-slate-900 pt-3 pb-1 border-b border-slate-100">
+                  <h2 key={idx} className="text-xl sm:text-2xl font-bold text-[#071D3F] pt-3 pb-1 border-b border-slate-100">
                     {trimmed.replace('# ', '')}
                   </h2>
                 );
@@ -211,7 +211,7 @@ export default function LessonDetailPage() {
 
               if (trimmed.startsWith('## ')) {
                 return (
-                  <h3 key={idx} className="text-lg font-bold text-slate-900 pt-3 text-indigo-950">
+                  <h3 key={idx} className="text-lg font-bold text-[#071D3F] pt-3">
                     {trimmed.replace('## ', '')}
                   </h3>
                 );

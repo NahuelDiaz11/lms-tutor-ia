@@ -93,10 +93,10 @@ export default function Navbar() {
           </div>
           <div className="flex flex-col">
             <div className="flex items-baseline">
-              <span className="font-extrabold text-[#0B1B3D] text-xl tracking-tight leading-none">Class-</span>
-              <span className="font-extrabold text-[#E50000] text-xl tracking-tight leading-none">Edtech</span>
+              <span className="font-extrabold text-[#071D3F] text-xl tracking-tight leading-none">Class-</span>
+              <span className="font-extrabold text-[#EB0202] text-xl tracking-tight leading-none">Edtech</span>
             </div>
-            <span className="text-[9px] tracking-[0.25em] font-extrabold text-[#0B1B3D] uppercase leading-tight mt-0.5">
+            <span className="text-[9px] tracking-[0.25em] font-extrabold text-[#071D3F] uppercase leading-tight mt-0.5">
               LEARNING
             </span>
           </div>
@@ -155,7 +155,7 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs shadow-sm transition"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#071D3F] hover:bg-[#071D3F]/90 text-white font-medium text-xs shadow-sm transition"
             >
               <LogIn className="w-4 h-4" /> Iniciar Sesión
             </Link>

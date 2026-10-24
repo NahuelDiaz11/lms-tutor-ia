@@ -179,21 +179,24 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
 
   return (
     <div className="flex flex-col h-[700px] bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-      {/* Header del Tutor */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white px-5 py-4 flex items-center justify-between border-b border-indigo-900/40">
+      {/* Franja Roja Superior con Degradé Oficial (#EB0202 -> #CC0003) */}
+      <div className="h-2 w-full bg-gradient-to-r from-[#EB0202] to-[#CC0003]"></div>
+
+      {/* Header del Tutor con Azul Marino #071D3F */}
+      <div className="bg-[#071D3F] text-white px-5 py-4 flex items-center justify-between border-b border-[#071D3F]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300">
-            <Bot className="w-5 h-5 text-indigo-300" />
+          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
+            <img src="/logo.png" alt="Class-Edtech" className="w-6 h-6 object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-sm tracking-wide text-white">Tutor IA Contextual</h2>
-              <span className="flex items-center gap-1 text-[11px] bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full border border-indigo-400/20">
-                <Sparkles className="w-3 h-3 text-amber-300" /> Asistencia Activa
+              <h2 className="font-bold text-sm tracking-wide text-white">Tutor IA Class-Edtech</h2>
+              <span className="flex items-center gap-1 text-[11px] bg-[#EB0202] text-white px-2 py-0.5 rounded-full font-bold">
+                <Sparkles className="w-3 h-3 text-amber-200" /> Asistencia Activa
               </span>
             </div>
-            <p className="text-xs text-indigo-200/80 truncate max-w-xs sm:max-w-md">
-              Restringido al contenido de: <span className="font-medium text-white">{lessonTitle}</span>
+            <p className="text-xs text-slate-300 truncate max-w-xs sm:max-w-md">
+              Restringido al contenido de: <span className="font-semibold text-white">{lessonTitle}</span>
             </p>
           </div>
         </div>
@@ -201,7 +204,7 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
         <button
           onClick={loadHistory}
           title="Recargar historial"
-          className="text-indigo-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition"
+          className="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition"
         >
           <RefreshCw className={`w-4 h-4 ${isLoadingHistory ? 'animate-spin' : ''}`} />
         </button>
@@ -282,16 +285,16 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
                 className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
               >
                 {!isUser && (
-                  <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-1">
-                    <Bot className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-xl bg-[#071D3F] text-white flex items-center justify-center shrink-0 shadow-xs mt-1">
+                    <img src="/logo.png" alt="Class-Edtech" className="w-5 h-5 object-contain" />
                   </div>
                 )}
 
                 <div
                   className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 text-sm leading-relaxed shadow-xs ${
                     isUser
-                      ? 'bg-indigo-600 text-white rounded-br-none'
-                      : 'bg-white text-slate-800 border border-slate-200/80 rounded-bl-none'
+                      ? 'bg-[#071D3F] text-white rounded-br-none'
+                      : 'bg-white text-[#071D3F] border border-slate-200/80 rounded-bl-none'
                   }`}
                 >
                   {/* Encabezado del mensaje */}
@@ -425,13 +428,13 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
             }
             className={`p-2.5 rounded-xl transition flex items-center justify-center shrink-0 ${
               isListening
-                ? 'bg-rose-600 text-white animate-recording shadow-md shadow-rose-200'
+                ? 'bg-[#EB0202] text-white animate-recording shadow-md shadow-red-200'
                 : isSttSupported
                 ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300'
                 : 'bg-slate-100 text-slate-400 cursor-not-allowed'
             }`}
           >
-            {isListening ? <Mic className="w-5 h-5" /> : <Mic className="w-5 h-5 text-indigo-600" />}
+            {isListening ? <Mic className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5 text-[#EB0202]" />}
           </button>
 
           {/* Campo de Texto editable (el alumno revisa/edita antes de enviar) */}
@@ -447,11 +450,11 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
                   : 'Escribe tu pregunta o usa el micrófono...'
               }
               disabled={isSending}
-              className="w-full pl-3.5 pr-20 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
+              className="w-full pl-3.5 pr-20 py-2.5 text-sm bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EB0202]/20 focus:border-[#071D3F] transition text-[#071D3F]"
             />
             {wasVoiceInput && inputQuestion && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] bg-indigo-100 text-indigo-700 font-medium px-1.5 py-0.5 rounded">
-                Transcrito
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] bg-red-100 text-[#EB0202] font-bold px-1.5 py-0.5 rounded">
+                Voz
               </span>
             )}
           </div>
@@ -460,7 +463,7 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
           <button
             type="submit"
             disabled={!inputQuestion.trim() || isSending}
-            className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-xs"
+            className="p-2.5 rounded-xl bg-[#071D3F] hover:bg-[#071D3F]/90 text-white font-medium transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center shadow-xs"
           >
             <Send className="w-5 h-5" />
           </button>

@@ -71,10 +71,10 @@ export default function LoginPage() {
             />
           </div>
           <div className="flex items-baseline justify-center">
-            <span className="text-3xl font-extrabold text-[#0B1B3D] tracking-tight">Class-</span>
-            <span className="text-3xl font-extrabold text-[#E50000] tracking-tight">Edtech</span>
+            <span className="text-3xl font-extrabold text-[#071D3F] tracking-tight">Class-</span>
+            <span className="text-3xl font-extrabold text-[#EB0202] tracking-tight">Edtech</span>
           </div>
-          <span className="text-xs tracking-[0.25em] font-extrabold text-[#0B1B3D] block uppercase mt-0.5">
+          <span className="text-xs tracking-[0.25em] font-extrabold text-[#071D3F] block uppercase mt-0.5">
             LEARNING
           </span>
           <p className="text-xs text-slate-500 mt-2">
@@ -84,8 +84,8 @@ export default function LoginPage() {
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-rose-800 flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+          <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-xs text-[#EB0202] flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-[#EB0202] shrink-0 mt-0.5" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -93,7 +93,7 @@ export default function LoginPage() {
         {/* Formulario Tradicional */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-[#071D3F] mb-1">
               Correo Electrónico del Alumno
             </label>
             <div className="relative">
@@ -102,15 +102,15 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="ejemplo@edtech.poc"
+                placeholder="alumno.autorizado@classedtech.com.co"
                 required
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#EB0202]/20 focus:border-[#071D3F] transition"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-semibold text-[#071D3F] mb-1">
               Contraseña
             </label>
             <div className="relative">
@@ -121,7 +121,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#EB0202]/20 focus:border-[#071D3F] transition"
               />
             </div>
           </div>
@@ -129,7 +129,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl transition shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-2.5 px-4 bg-[#071D3F] hover:bg-[#071D3F]/90 text-white font-medium text-sm rounded-xl transition shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {isLoading ? 'Verificando...' : 'Iniciar Sesión'}
             <ArrowRight className="w-4 h-4" />
@@ -138,8 +138,8 @@ export default function LoginPage() {
 
         {/* Cuentas de Prueba Preconfiguradas para Evaluación Rápida */}
         <div className="pt-4 border-t border-slate-200">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-3">
-            <ShieldCheck className="w-4 h-4 text-indigo-600" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#071D3F] mb-3">
+            <ShieldCheck className="w-4 h-4 text-[#EB0202]" />
             <span>Accesos de Prueba para Evaluación Rápida:</span>
           </div>
 
