@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('--- Iniciando Semilla de Base de Datos EdTech LMS (Inglés) ---');
+  console.log('--- Iniciando Semilla de Base de Datos Class-Edtech Learning ---');
 
   // Limpiar datos existentes en orden
   await prisma.message.deleteMany();
@@ -17,7 +17,7 @@ async function main() {
   const alumnoAutorizado = await prisma.user.create({
     data: {
       id: 'usr_autorizado_01',
-      email: 'alumno.autorizado@edtech.poc',
+      email: 'alumno.autorizado@classedtech.com.co',
       password: 'password123',
       name: 'Ana Silva (Con Acceso al Curso)',
       role: 'STUDENT',
@@ -27,7 +27,7 @@ async function main() {
   const alumnoSinAcceso = await prisma.user.create({
     data: {
       id: 'usr_noautorizado_02',
-      email: 'alumno.noautorizado@edtech.poc',
+      email: 'alumno.noautorizado@classedtech.com.co',
       password: 'password123',
       name: 'Pedro Gómez (Sin Acceso al Curso)',
       role: 'STUDENT',

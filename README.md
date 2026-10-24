@@ -1,20 +1,23 @@
-# LinguaLearn AI - POC Tutor Virtual de Inglés con Voz en Plataforma EdTech
+# Class-Edtech Learning - Tutor Virtual con IA y Voz
 
-Prueba de concepto (POC) funcional desarrollada para una **plataforma EdTech de aprendizaje de idiomas**. Representa una experiencia de aprendizaje interactiva asistida por un tutor de inteligencia artificial contextual, con **interacción por voz en tiempo real (STT y TTS)** para la práctica activa de *Speaking* y *Listening*, control de accesos seguro y persistencia de diálogo pedagógico.
+![Class-Edtech Learning Banner](/banner.png)
+
+Prueba de concepto (POC) funcional desarrollada para la plataforma **Class-Edtech Learning** ([ww.classedtech.com.co](https://ww.classedtech.com.co)). Implementa una experiencia de aprendizaje interactiva asistida por un tutor de inteligencia artificial contextual, con **interacción por voz en tiempo real (STT y TTS)** para la práctica de *Speaking* y *Listening*, control de accesos seguro (prevención IDOR) y persistencia de diálogo pedagógico.
 
 ---
 
 ## 📋 Resumen del Proyecto y Requerimientos Cumplidos
 
-| Requerimiento | Implementación en LinguaLearn AI |
+| Requerimiento | Implementación en Class-Edtech Learning |
 |---|---|
 | **01 Contenido de aprendizaje** | Curso de inglés: *"Inglés Práctico: Comunicación y Estructuras Fundamentales (A2-B1)"* con 2 lecciones completas (Lección 1: *Present Simple & Daily Routines, reglas de tercera persona y auxiliares Do/Does*; Lección 2: *Past Simple vs Present Perfect, marcadores temporales concluidos vs experiencias de vida*). |
-| **02 Alumnos y acceso** | 2 alumnos de prueba preconfigurados: **Ana Silva** (`alumno.autorizado@edtech.poc`, con matrícula activa al curso de inglés) y **Pedro Gómez** (`alumno.noautorizado@edtech.poc`, sin matrícula). Bloqueo estricto con **HTTP 403 Forbidden** y prevención de IDOR. |
+| **02 Alumnos y acceso** | 2 alumnos de prueba preconfigurados: **Ana Silva** (`alumno.autorizado@classedtech.com.co`, con matrícula activa al curso de inglés) y **Pedro Gómez** (`alumno.noautorizado@classedtech.com.co`, sin matrícula). Bloqueo estricto con **HTTP 403 Forbidden** y prevención de IDOR. |
 | **03 Tutor de IA contextual** | Respuestas pedagógicas restringidas exclusivamente al contenido de la lección activa. Si el alumno indaga sobre temas no incluidos en el material, el tutor indica formalmente que no dispone de información suficiente. |
 | **04 Interacción por voz y texto** | **Speaking (STT):** El alumno puede grabar su duda o pronunciación; su voz se transcribirá en tiempo real a la caja de texto para que pueda revisarla o editarla antes de enviarla al tutor. **Listening (TTS):** Sintetizador de voz en la respuesta con controles de audio para escuchar la explicación y modelos orales. |
 | **05 Continuidad de la conversación** | Historial de intercambios almacenado en base de datos SQLite por lección y alumno. Al recargar la sesión o volver en días posteriores, el alumno recupera íntegramente sus conversaciones anteriores. |
 | **06 Experiencia de uso y resiliencia** | Señalización visual de estados (grabando con ondas sonoras, transcribiendo, consultando material, reproduciendo audio) y recuperación amigable ante incidencias de micrófono o desconexión con botón interactivo de **"Reintentar"**. |
-| **Buenas Prácticas & Seguridad** | Suite de pruebas automatizadas con **Vitest** (9 tests pasando), workflow de **GitHub Actions (CI)**, prevención de XSS/SQLi e inyección de contexto segura. |
+| **07 Autenticación & Login** | Pantalla de Login formal (`/login`) con credenciales y botones de acceso rápido demostrativo para el evaluador. |
+| **Buenas Prácticas & Seguridad** | Suite de **11 pruebas automatizadas** con **Vitest** (100% pasando), workflow de **GitHub Actions (CI)**, prevención de XSS/SQLi e inyección de contexto segura. |
 
 ---
 
@@ -57,7 +60,7 @@ Abre tu navegador en [http://localhost:3000](http://localhost:3000).
 
 ## 🧪 Ejecución de Pruebas Automatizadas
 
-El proyecto incluye tests unitarios y de integración para validar el comportamiento contextual del tutor, el manejo de preguntas fuera de material y el control estricto de autorizaciones:
+El proyecto incluye tests unitarios y de integración para validar la autenticación, el comportamiento contextual del tutor, el manejo de preguntas fuera de material y el control estricto de autorizaciones:
 
 ```bash
 npm test
@@ -70,35 +73,41 @@ npm run build
 
 ---
 
-## 🧭 Guía de Demostración y Evaluación del Flujo
+## 🧭 Cuentas de Acceso y Guía de Demostración
 
-Para comprobar fácilmente todos los criterios de la prueba técnica en el entorno EdTech de inglés:
+### Credenciales de Prueba Preconfiguradas:
+* **Alumno Con Acceso:** `alumno.autorizado@classedtech.com.co` | Contraseña: `password123`
+* **Alumno Sin Acceso:** `alumno.noautorizado@classedtech.com.co` | Contraseña: `password123`
 
-### 1. Demostración con Alumno Autorizado (Ana Silva)
-* En la barra superior, confirma que esté activo el perfil **«Alumno Con Acceso»** (activo por defecto).
-* Haz clic en **«Estudiar y consultar al tutor»** en la **Lección 1: Present Simple & Daily Routines**.
-* **Prueba de Voz / Speaking (STT):**
-  * Presiona el botón del **micrófono** y formula verbalmente preguntas como:
-    * *«¿Cuándo debo usar "do" y cuándo "does"?»*
-    * *«¿Qué significa la frase "What do you do" y cómo respondo?»*
-    * *«¿Por qué se agrega -s en tercera persona?»*
-  * Observa cómo la voz se transcribe en tiempo real en la caja de texto antes del envío. Puedes modificar o complementar el texto con el teclado.
-  * Presiona enviar. El tutor responderá explicando las reglas de la lección con tono pedagógico bilingüe.
-* **Prueba de Audio / Listening (TTS):**
-  * En la respuesta del tutor, presiona el botón **«Escuchar»** para oír la explicación y las oraciones en inglés en audio sintetizado.
-* **Prueba Fuera de Contexto:**
-  * Escribe o dicta una pregunta ajena a la lección, por ejemplo: *«¿Cómo preparo una receta de cocina?»* o *«¿Cómo programo una red neuronal en Python?»*.
-  * Comprueba que el tutor responde estrictamente:  
-    > *"No dispongo de información suficiente en el contenido de esta lección para responder a tu pregunta. Te sugiero consultar las demás lecciones del curso o el material complementario."*
+*(En la pantalla de [http://localhost:3000/login](http://localhost:3000/login) también dispones de botones de 1 clic para entrar directamente sin escribir).*
 
-### 2. Demostración de Continuidad del Historial
-* Actualiza el navegador (F5 / Ctrl+R) o navega a la Lección 2 y regresa a la Lección 1.
-* Comprueba que el historial de preguntas y respuestas se mantiene intacto y recuperado desde la base de datos.
+### Flujo de Evaluación:
 
-### 3. Demostración de Control de Acceso y Prevención IDOR (Pedro Gómez)
-* En la barra de navegación superior, presiona el botón **«Alumno Sin Acceso»**.
-* Intenta ingresar a cualquiera de las lecciones del curso de inglés.
-* Comprueba que el servidor responde con **HTTP 403 Forbidden** bloqueando de inmediato el acceso al contenido y las conversaciones privadas del otro usuario.
+1. **Demostración con Alumno Autorizado (Ana Silva):**
+   * Inicia sesión con la cuenta de Ana.
+   * Entra a la **Lección 1: Present Simple & Daily Routines**.
+   * **Prueba de Voz / Speaking (STT):**
+     * Presiona el botón del **micrófono** y formula verbalmente preguntas como:
+       * *«¿Cuándo debo usar "do" y cuándo "does"?»*
+       * *«¿Qué significa la frase "What do you do" y cómo respondo?»*
+       * *«¿Por qué se agrega -s en tercera persona?»*
+     * Observa la transcripción en tiempo real en la caja de texto antes del envío.
+     * Envía la consulta y recibe la explicación detallada.
+   * **Prueba de Audio / Listening (TTS):**
+     * Presiona el botón **«Escuchar»** en la respuesta para oír la dicción en audio.
+   * **Prueba Fuera de Contexto:**
+     * Pregunta un tema no cubierto (ej. recetas de cocina o programación).
+     * Comprueba que el tutor responde estrictamente:  
+       > *"No dispongo de información suficiente en el contenido de esta lección para responder a tu pregunta. Te sugiero consultar las demás lecciones del curso o el material complementario."*
+
+2. **Demostración de Continuidad del Historial:**
+   * Actualiza el navegador (F5 / Ctrl+R) o cambia de lección y regresa.
+   * Comprueba que la conversación se mantiene intacta desde la base de datos SQLite.
+
+3. **Demostración de Control de Acceso y Prevención IDOR (Pedro Gómez):**
+   * Cambia en la barra superior a **«Sin Acceso»** o cierra sesión y entra con la cuenta de Pedro.
+   * Intenta ingresar a las lecciones del curso.
+   * El servidor bloquea el acceso con **HTTP 403 Forbidden**, previniendo que un usuario sin matrícula lea el material o las conversaciones privadas.
 
 ---
 
@@ -111,7 +120,7 @@ DATABASE_URL="file:./dev.db"
 AI_PROVIDER="mock"
 ```
 
-Si deseas evaluar la interacción con modelos de producción reales, puedes suministrar una API key y cambiar el proveedor:
+Si deseas evaluar la interacción con modelos de producción reales, puedes suministrar una API key en `.env`:
 
 ```env
 # Para Google Gemini:
@@ -125,37 +134,5 @@ OPENAI_API_KEY="tu_clave_de_openai"
 
 ---
 
-## 📂 Estructura del Código
-
-```
-poc-lms-tutor-ia/
-├── prisma/
-│   └── schema.prisma          # Definición de modelos User, Course, Lesson, Enrollment, Conversation, Message
-├── scripts/
-│   └── seed.mjs               # Script de carga inicial de datos EdTech de inglés
-├── src/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── auth/          # Endpoints de sesión y conmutación de usuarios de prueba
-│   │   │   ├── courses/       # Catálogo de cursos con verificación de matrícula
-│   │   │   └── lessons/       # Detalle de lección y conversaciones (protección IDOR y 403)
-│   │   ├── lessons/[id]/      # Vista dividida: Material de lección + Tutor IA
-│   │   ├── layout.tsx         # Layout principal con Navbar y selector de alumnos
-│   │   └── page.tsx           # Dashboard principal del LMS EdTech
-│   ├── components/
-│   │   ├── Navbar.tsx         # Barra con conmutador rápido de alumnos de prueba
-│   │   └── TutorChat.tsx      # Chat interactivo con STT, TTS, estados y resiliencia
-│   ├── hooks/
-│   │   ├── useSpeechRecognition.ts  # Hook para STT con Web Speech API y recuperación de errores
-│   │   └── useSpeechSynthesis.ts    # Hook para TTS con sintetizador nativo
-│   └── lib/
-│       ├── ai/                # Motor de IA: Mock EdTech inteligente, Gemini y OpenAI
-│       ├── auth.ts            # Helpers de autenticación, verificación de permisos y anti-IDOR
-│       └── db.ts              # Cliente singleton de Prisma ORM
-├── tests/
-│   ├── ai-tutor.test.ts       # Pruebas del tutor de inglés y delimitación de material
-│   └── authorization.test.ts  # Pruebas de acceso de alumnos y prevención de IDOR
-├── .github/workflows/ci.yml   # Integración continua con GitHub Actions
-├── DECISIONES.md              # Documento formal de arquitectura, decisiones y límites
-└── README.md                  # Este documento
-```
+## 📄 Documentación de Decisiones Técnicas
+Consulta el documento [DECISIONES.md](DECISIONES.md) para un desglose completo de la arquitectura relacional, desarrollo seguro y límites de la POC.

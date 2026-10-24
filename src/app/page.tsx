@@ -65,20 +65,45 @@ export default function HomePage() {
   const isAuthorized = currentUser?.id === 'usr_autorizado_01';
 
   return (
-    <div className="space-y-8 py-2">
-      {/* Hero / Banner Principal */}
-      <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="space-y-6 py-2">
+      {/* Brand Header Banner */}
+      <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-xs border border-slate-200/90 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <img
+            src="/logo.png"
+            alt="Class-Edtech Learning Logo"
+            className="w-12 h-12 object-contain"
+          />
+          <div>
+            <div className="flex items-baseline">
+              <span className="text-2xl sm:text-3xl font-extrabold text-[#0B1B3D] tracking-tight">Class-</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-[#E50000] tracking-tight">Edtech</span>
+            </div>
+            <span className="text-[10px] tracking-[0.28em] font-extrabold text-[#0B1B3D] block uppercase leading-none mt-0.5">
+              LEARNING
+            </span>
+          </div>
+        </div>
+
+        <div className="hidden sm:flex flex-col items-end text-right">
+          <span className="text-xs font-semibold text-slate-700">Plataforma EdTech de Aprendizaje</span>
+          <span className="text-[11px] font-mono text-[#E50000] font-semibold">ww.classedtech.com.co</span>
+        </div>
+      </div>
+
+      {/* Hero Principal con Paleta Class-Edtech */}
+      <div className="bg-gradient-to-br from-[#0B1B3D] via-[#122857] to-[#071329] rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden border border-[#1b3a7a]/40">
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="max-w-3xl relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-semibold mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" /> EdTech LMS &bull; Tutor Virtual de Inglés con Voz
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/15 border border-red-500/30 text-red-200 text-xs font-semibold mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Class-Edtech Learning &bull; Tutor Virtual de Inglés con Voz
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">
-            Domina el Inglés con tu Tutor de IA por Voz
+            Aprende Inglés Interactivo con Asistencia de Voz
           </h1>
-          <p className="text-sm sm:text-base text-indigo-100/90 leading-relaxed mb-6">
-            Plataforma EdTech especializada en el aprendizaje de idiomas. Practica tu *speaking* y *listening* con interacción por voz en tiempo real, delimitación pedagógica estricta y control de acceso seguro.
+          <p className="text-sm sm:text-base text-slate-200 leading-relaxed mb-6">
+            Plataforma EdTech para el dominio de idiomas. Practica tu pronunciación y fluidez oral (*Speaking* y *Listening*) con interacción por voz en tiempo real, delimitación pedagógica estricta y control de accesos seguro.
           </p>
 
           {/* Guía Rápida para el Evaluador */}

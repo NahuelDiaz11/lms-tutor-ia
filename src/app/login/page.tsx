@@ -63,14 +63,22 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-xl">
         {/* Brand Header */}
         <div className="text-center">
-          <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white mx-auto shadow-md shadow-indigo-200 mb-3">
-            <GraduationCap className="w-8 h-8" />
+          <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center">
+            <img
+              src="/logo.png"
+              alt="Class-Edtech Logo"
+              className="w-16 h-16 object-contain"
+            />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-            Ingreso a LinguaLearn AI
-          </h2>
-          <p className="text-xs text-slate-500 mt-1">
-            Plataforma EdTech de Aprendizaje de Inglés con Tutor de Voz
+          <div className="flex items-baseline justify-center">
+            <span className="text-3xl font-extrabold text-[#0B1B3D] tracking-tight">Class-</span>
+            <span className="text-3xl font-extrabold text-[#E50000] tracking-tight">Edtech</span>
+          </div>
+          <span className="text-xs tracking-[0.25em] font-extrabold text-[#0B1B3D] block uppercase mt-0.5">
+            LEARNING
+          </span>
+          <p className="text-xs text-slate-500 mt-2">
+            Plataforma EdTech de Aprendizaje con Tutor de Voz
           </p>
         </div>
 
@@ -147,14 +155,14 @@ export default function LoginPage() {
                   </span>
                 </div>
                 <p className="text-[11px] text-emerald-800 mt-0.5 font-mono">
-                  alumno.autorizado@edtech.poc
+                  alumno.autorizado@classedtech.com.co
                 </p>
               </div>
               <button
                 type="button"
                 disabled={isLoading}
                 onClick={() =>
-                  handleQuickLogin('alumno.autorizado@edtech.poc', 'password123')
+                  handleQuickLogin('alumno.autorizado@classedtech.com.co', 'password123')
                 }
                 className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1.5 rounded-lg transition shrink-0"
               >
@@ -173,14 +181,14 @@ export default function LoginPage() {
                   </span>
                 </div>
                 <p className="text-[11px] text-rose-800 mt-0.5 font-mono">
-                  alumno.noautorizado@edtech.poc
+                  alumno.noautorizado@classedtech.com.co
                 </p>
               </div>
               <button
                 type="button"
                 disabled={isLoading}
                 onClick={() =>
-                  handleQuickLogin('alumno.noautorizado@edtech.poc', 'password123')
+                  handleQuickLogin('alumno.noautorizado@classedtech.com.co', 'password123')
                 }
                 className="text-xs bg-rose-600 hover:bg-rose-700 text-white font-medium px-3 py-1.5 rounded-lg transition shrink-0"
               >

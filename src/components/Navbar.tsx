@@ -82,19 +82,23 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-100 group-hover:bg-indigo-700 transition">
-            <GraduationCap className="w-6 h-6" />
+        {/* Brand Class-Edtech Learning */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 shrink-0 flex items-center justify-center">
+            <img
+              src="/logo.png"
+              alt="Class-Edtech Logo"
+              className="w-10 h-10 object-contain hover:scale-105 transition duration-200"
+            />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-900 tracking-tight text-lg">LinguaLearn AI</span>
-              <span className="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200/60 font-medium px-2 py-0.5 rounded-full flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> EdTech Inglés
-              </span>
+          <div className="flex flex-col">
+            <div className="flex items-baseline">
+              <span className="font-extrabold text-[#0B1B3D] text-xl tracking-tight leading-none">Class-</span>
+              <span className="font-extrabold text-[#E50000] text-xl tracking-tight leading-none">Edtech</span>
             </div>
-            <p className="text-xs text-slate-500 hidden sm:block">Plataforma de Aprendizaje de Inglés con Tutor de Voz</p>
+            <span className="text-[9px] tracking-[0.25em] font-extrabold text-[#0B1B3D] uppercase leading-tight mt-0.5">
+              LEARNING
+            </span>
           </div>
         </Link>
 
