@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 interface Message {
   id: string;
@@ -338,8 +339,14 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
                     )}
                   </div>
 
-                  {/* Contenido del mensaje */}
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                  {/* Contenido del mensaje con formato Markdown limpio sin asteriscos */}
+                  <div className="text-xs sm:text-[13px] leading-relaxed">
+                    <MarkdownRenderer
+                      content={msg.content}
+                      isCompact={true}
+                      theme={isUser ? 'invert' : 'default'}
+                    />
+                  </div>
 
                   {/* Visualizador de ondas si está leyendo */}
                   {isReadingThis && (

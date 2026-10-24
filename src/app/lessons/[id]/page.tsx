@@ -14,6 +14,7 @@ import {
   GraduationCap,
 } from 'lucide-react';
 import TutorChat from '@/components/TutorChat';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 interface Lesson {
   id: string;
@@ -196,52 +197,9 @@ export default function LessonDetailPage() {
             {lesson.title}
           </h1>
 
-          {/* Renderizado del texto de la lección con estilo pedagógico */}
-          <div className="prose prose-slate max-w-none text-[#071D3F] text-sm sm:text-base leading-relaxed space-y-4">
-            {lesson.content.split('\n\n').map((paragraph, idx) => {
-              const trimmed = paragraph.trim();
-
-              if (trimmed.startsWith('# ')) {
-                return (
-                  <h2 key={idx} className="text-xl sm:text-2xl font-bold text-[#071D3F] pt-3 pb-1 border-b border-slate-100">
-                    {trimmed.replace('# ', '')}
-                  </h2>
-                );
-              }
-
-              if (trimmed.startsWith('## ')) {
-                return (
-                  <h3 key={idx} className="text-lg font-bold text-[#071D3F] pt-3">
-                    {trimmed.replace('## ', '')}
-                  </h3>
-                );
-              }
-
-              if (trimmed.startsWith('### ')) {
-                return (
-                  <h4 key={idx} className="text-base font-bold text-slate-800 pt-2 text-indigo-900">
-                    {trimmed.replace('### ', '')}
-                  </h4>
-                );
-              }
-
-              if (trimmed.startsWith('- ')) {
-                const items = trimmed.split('\n').filter((line) => line.trim().startsWith('- '));
-                return (
-                  <ul key={idx} className="list-disc pl-5 space-y-1.5 my-3 text-sm text-slate-700">
-                    {items.map((it, itemIdx) => (
-                      <li key={itemIdx}>{it.replace(/^- /, '')}</li>
-                    ))}
-                  </ul>
-                );
-              }
-
-              return (
-                <p key={idx} className="leading-relaxed text-sm sm:text-[15px] text-slate-700">
-                  {trimmed}
-                </p>
-              );
-            })}
+          {/* Renderizado de Markdown rico con estilos Class-Edtech */}
+          <div className="mt-4">
+            <MarkdownRenderer content={lesson.content} />
           </div>
 
           <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">

@@ -107,7 +107,7 @@ export default function HomePage() {
               Aprende Inglés Interactivo con Asistencia de Voz
             </h1>
             <p className="text-sm sm:text-base text-slate-200 leading-relaxed mb-6">
-              Plataforma EdTech para el dominio de idiomas. Practica tu pronunciación y fluidez oral (*Speaking* y *Listening*) con interacción por voz en tiempo real, delimitación pedagógica estricta y control de accesos seguro.
+              Plataforma EdTech para el dominio de idiomas. Practica tu pronunciación y fluidez oral (<span className="font-semibold text-white">Speaking</span> y <span className="font-semibold text-white">Listening</span>) con interacción por voz en tiempo real, delimitación pedagógica estricta y control de accesos seguro.
             </p>
 
             {/* Guía Rápida para el Evaluador */}
