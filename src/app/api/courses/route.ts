@@ -38,10 +38,16 @@ export async function GET(req: NextRequest) {
       isEnrolled: Array.isArray(course.enrollments) && course.enrollments.length > 0,
     }));
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       courses: coursesWithAccess,
       user,
     });
+
+    if (!user && req.cookies.has('poc_lms_user_id')) {
+      res.cookies.delete('poc_lms_user_id');
+    }
+
+    return res;
   } catch (error) {
     console.error('Error al listar cursos:', error);
     return NextResponse.json({ error: 'Error al consultar cursos' }, { status: 500 });

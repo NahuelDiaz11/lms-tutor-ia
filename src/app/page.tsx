@@ -16,6 +16,8 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+
 interface Lesson {
   id: string;
   title: string;
@@ -40,6 +42,7 @@ interface User {
 }
 
 export default function HomePage() {
+  const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,24 +54,24 @@ export default function HomePage() {
         if (res.ok) {
           const data = await res.json();
           if (!data.user) {
-            window.location.href = '/login';
+            router.replace('/login');
             return;
           }
           setCourses(data.courses || []);
           setCurrentUser(data.user);
         } else {
-          window.location.href = '/login';
+          router.replace('/login');
           return;
         }
       } catch (err) {
         console.error('Error al cargar cursos:', err);
-        window.location.href = '/login';
+        router.replace('/login');
       } finally {
         setIsLoading(false);
       }
     }
     loadData();
-  }, []);
+  }, [router]);
 
   const isAuthorized = currentUser?.id === 'usr_autorizado_01';
 
