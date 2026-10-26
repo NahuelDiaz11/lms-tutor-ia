@@ -50,11 +50,19 @@ export default function HomePage() {
         const res = await fetch('/api/courses');
         if (res.ok) {
           const data = await res.json();
+          if (!data.user) {
+            window.location.href = '/login';
+            return;
+          }
           setCourses(data.courses || []);
           setCurrentUser(data.user);
+        } else {
+          window.location.href = '/login';
+          return;
         }
       } catch (err) {
         console.error('Error al cargar cursos:', err);
+        window.location.href = '/login';
       } finally {
         setIsLoading(false);
       }
@@ -63,6 +71,19 @@ export default function HomePage() {
   }, []);
 
   const isAuthorized = currentUser?.id === 'usr_autorizado_01';
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[500px] flex flex-col items-center justify-center text-slate-500 gap-3">
+        <div className="w-10 h-10 border-4 border-red-200 border-t-[#EB0202] rounded-full animate-spin"></div>
+        <p className="text-sm font-medium text-[#071D3F]">Verificando sesión...</p>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return null;
+  }
 
   return (
     <div className="space-y-6 py-2">
