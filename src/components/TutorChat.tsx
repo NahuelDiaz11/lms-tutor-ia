@@ -14,6 +14,8 @@ import {
   Sparkles,
   CheckCircle2,
   Info,
+  Sliders,
+  Check,
 } from 'lucide-react';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis';
@@ -40,12 +42,22 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
   const [errorStatus, setErrorStatus] = useState<string | null>(null);
   const [lastFailedQuestion, setLastFailedQuestion] = useState<string | null>(null);
   const [wasVoiceInput, setWasVoiceInput] = useState(false);
+  const [showVoiceSelector, setShowVoiceSelector] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Hook de Síntesis de Voz (TTS)
-  const { speak, stop: stopSpeaking, isSpeaking, speakingMessageId, error: ttsError } = useSpeechSynthesis();
+  // Hook de Síntesis de Voz (TTS con selección de voz humana)
+  const {
+    speak,
+    stop: stopSpeaking,
+    isSpeaking,
+    speakingMessageId,
+    error: ttsError,
+    availableVoices,
+    selectedVoice,
+    setVoiceByURI,
+  } = useSpeechSynthesis();
 
   // Hook de Reconocimiento de Voz (STT)
   const {
@@ -208,13 +220,112 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
             </div>
           </div>
 
-          <button
-            onClick={loadHistory}
-            title="Recargar historial"
-            className="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition shrink-0 mt-0.5"
-          >
-            <RefreshCw className={`w-4 h-4 ${isLoadingHistory ? 'animate-spin' : ''}`} />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0 mt-0.5">
+            {/* Selector de Voz Humana */}
+            {availableVoices.length > 0 && (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowVoiceSelector(!showVoiceSelector)}
+                  title="Configuración de voz: Selecciona la voz más natural"
+                  className={`p-2 rounded-lg transition flex items-center gap-1 text-xs ${
+                    showVoiceSelector
+                      ? 'bg-white/20 text-white'
+                      : 'text-slate-300 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <Sliders className="w-4 h-4 text-amber-300" />
+                  <span className="hidden sm:inline text-[11px] font-medium max-w-[85px] truncate">
+                    {selectedVoice?.name?.replace(/Microsoft |Google /g, '') || 'Voz'}
+                  </span>
+                </button>
+
+                {/* Popover con lista de voces ordenadas por naturalidad */}
+                {showVoiceSelector && (
+                  <div className="absolute right-0 top-10 z-50 w-72 sm:w-80 bg-white text-slate-800 rounded-2xl shadow-xl border border-slate-200 p-3 text-xs animate-in fade-in zoom-in-95">
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                      <div>
+                        <span className="font-bold text-[#071D3F] flex items-center gap-1 text-xs">
+                          <Volume2 className="w-3.5 h-3.5 text-[#EB0202]" /> Voces Disponibles
+                        </span>
+                        <p className="text-[10px] text-slate-500">Selecciona la voz con entonación más humana</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowVoiceSelector(false)}
+                        className="text-slate-400 hover:text-slate-600 font-bold px-1 text-sm"
+                      >
+                        &times;
+                      </button>
+                    </div>
+
+                    <div className="max-h-56 overflow-y-auto space-y-1 pr-1">
+                      {availableVoices.map((v) => {
+                        const isSelected = selectedVoice?.voiceURI === v.voiceURI;
+                        const isNatural =
+                          v.name.toLowerCase().includes('natural') ||
+                          v.name.toLowerCase().includes('neural') ||
+                          v.name.toLowerCase().includes('google');
+
+                        return (
+                          <button
+                            key={v.voiceURI}
+                            type="button"
+                            onClick={() => {
+                              setVoiceByURI(v.voiceURI);
+                              setShowVoiceSelector(false);
+                            }}
+                            className={`w-full text-left p-2 rounded-xl transition flex items-center justify-between gap-2 text-xs ${
+                              isSelected
+                                ? 'bg-[#071D3F] text-white font-semibold'
+                                : 'hover:bg-slate-100 text-slate-700'
+                            }`}
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5">
+                                <span className="truncate">{v.name}</span>
+                                {isNatural && (
+                                  <span
+                                    className={`text-[9px] px-1.5 py-0.2 rounded font-bold uppercase shrink-0 ${
+                                      isSelected
+                                        ? 'bg-amber-300 text-[#071D3F]'
+                                        : 'bg-emerald-100 text-emerald-800'
+                                    }`}
+                                  >
+                                    Recomendada
+                                  </span>
+                                )}
+                              </div>
+                              <span
+                                className={`text-[10px] block truncate ${
+                                  isSelected ? 'text-slate-300' : 'text-slate-400'
+                                }`}
+                              >
+                                {v.lang}
+                              </span>
+                            </div>
+                            {isSelected && <Check className="w-3.5 h-3.5 shrink-0 text-amber-300" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                      <span>Voces 'Recomendada' usan redes neuronales</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <button
+              onClick={loadHistory}
+              title="Recargar historial"
+              className="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoadingHistory ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
         </div>
       </div>
 
