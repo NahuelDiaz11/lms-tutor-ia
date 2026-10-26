@@ -56,7 +56,7 @@ El propósito de la POC es validar de forma demostrable, comprensible y acotada 
 * **Decisión:** Arquitectura de proveedor desacoplado (`MockAIProvider`, `GeminiAIProvider`, `OpenAIAIProvider`) con inyección estricta de contexto y fallback automático.
 * **Justificación:**
   * **Mock Inteligente Offline (por defecto):** Permite ejecutar y evaluar toda la suite de pruebas y la aplicación web de inmediato, sin requerir una conexión a internet ni una API key activa. Responde fielmente a preguntas del contenido (por ejemplo: *"¿Para qué sirve POST?"*) y activa de forma determinista la respuesta de insuficiencia ante preguntas ajenas.
-  * **Compatibilidad con LLMs Reales:** Si se define `AI_PROVIDER="gemini"` o `AI_PROVIDER="openai"` junto con su clave en `.env`, el sistema utiliza el modelo de producción con delimitador de prompt estricto. Si la API externa fallara o agotara cuotas, el sistema degrada con gracia (*graceful degradation*) hacia el proveedor local sin romper la experiencia del alumno.
+  * **Compatibilidad con LLMs Reales (Google Gemini 2.5 Flash y OpenAI):** Si se define `AI_PROVIDER="gemini"` junto con su clave en `.env`, el sistema utiliza **`gemini-2.5-flash`** con delimitador de prompt estricto y temperatura 0.2. Si la API externa fallara, superara cuotas o no tuviese conexión, el sistema degrada con gracia (*graceful degradation*) hacia el proveedor local sin interrumpir la experiencia del alumno.
 
 ---
 

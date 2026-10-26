@@ -12,7 +12,7 @@ Prueba de concepto (POC) funcional desarrollada para la plataforma **Class-Edtec
 |---|---|
 | **01 Contenido de aprendizaje** | Curso de inglés: *"Inglés Práctico: Comunicación y Estructuras Fundamentales (A2-B1)"* con 2 lecciones completas (Lección 1: *Present Simple & Daily Routines, reglas de tercera persona y auxiliares Do/Does*; Lección 2: *Past Simple vs Present Perfect, marcadores temporales concluidos vs experiencias de vida*). |
 | **02 Alumnos y acceso** | 2 alumnos de prueba preconfigurados: **Ana Silva** (`alumno.autorizado@classedtech.com.co`, con matrícula activa al curso de inglés) y **Pedro Gómez** (`alumno.noautorizado@classedtech.com.co`, sin matrícula). Bloqueo estricto con **HTTP 403 Forbidden** y prevención de IDOR. |
-| **03 Tutor de IA contextual** | Respuestas pedagógicas restringidas exclusivamente al contenido de la lección activa. Si el alumno indaga sobre temas no incluidos en el material, el tutor indica formalmente que no dispone de información suficiente. |
+| **03 Tutor de IA contextual** | Respuestas pedagógicas restringidas exclusivamente al contenido de la lección activa. Motor híbrido desacoplado con **Google Gemini (gemini-2.5-flash)** de última generación y **EdTech Mock AI** autónomo offline como fallback seguro. Si el alumno indaga sobre temas no incluidos en el material, el tutor indica formalmente que no dispone de información suficiente. |
 | **04 Interacción por voz y texto** | **Speaking (STT):** El alumno puede grabar su duda o pronunciación; su voz se transcribirá en tiempo real a la caja de texto para que pueda revisarla o editarla antes de enviarla al tutor. **Listening (TTS Humano):** Motor de voz neuronal (Google WaveNet / OpenAI) que reproduce explicaciones en audio MP3 con entonación humana natural, visualizador de ondas y selector de voces. |
 | **05 Continuidad de la conversación** | Historial de intercambios almacenado en base de datos SQLite por lección y alumno. Al recargar la sesión o volver en días posteriores, el alumno recupera íntegramente sus conversaciones anteriores. |
 | **06 Experiencia de uso y resiliencia** | Señalización visual de estados (grabando con ondas sonoras, transcribiendo, consultando material, reproduciendo audio) y recuperación amigable ante incidencias de micrófono o desconexión con botón interactivo de **"Reintentar"**. |
@@ -111,25 +111,32 @@ npm run build
 
 ---
 
-## ⚙️ Configuración y Variables de Entorno
+## ⚙️ Configuración y Motores de IA
 
-El archivo `.env` viene preconfigurado para operar **100% offline y sin costos** mediante un Mock inteligente que no requiere tarjetas ni API keys:
+La plataforma cuenta con una arquitectura de IA desacoplada y multimodelo:
 
-```env
-DATABASE_URL="file:./dev.db"
-AI_PROVIDER="mock"
-```
-
-Si deseas evaluar la interacción con modelos de producción reales, puedes suministrar una API key en `.env`:
+### 1. Google Gemini 2.5 Flash (Recomendado - Gratuito y de Alta Precisión)
+El proyecto está integrado con **`gemini-2.5-flash`** a través de la API oficial de Google AI Studio. Ofrece razonamiento pedagógico profundo, comprensión de lenguaje natural y explicaciones orales de alta calidad:
 
 ```env
-# Para Google Gemini:
 AI_PROVIDER="gemini"
-GEMINI_API_KEY="tu_clave_de_gemini"
+GEMINI_API_KEY="AIzaSyTuClaveDeGemini"
+DATABASE_URL="file:./dev.db"
+```
+*(Puedes obtener una clave gratuita en 1 minuto en [Google AI Studio](https://aistudio.google.com/app/apikey) sin ingresar tarjeta de crédito).*
 
-# O para OpenAI:
+### 2. Motor EdTech Mock Inteligente (100% Offline y Autónomo)
+Si no se configura ninguna clave de API o si hay cortes de red, el sistema activa automáticamente su **EdTech Mock AI** interno:
+```env
+AI_PROVIDER="mock"
+DATABASE_URL="file:./dev.db"
+```
+Este motor analiza el material de la lección activa y responde preguntas sobre auxiliares *Do/Does*, *Present Simple*, tercera persona *-s/-es*, *Past Simple vs Present Perfect*, expresiones conversacionales como *What do you do?*, etc., y activa estrictamente la respuesta de insuficiencia ante preguntas ajenas.
+
+### 3. OpenAI (Opcional)
+```env
 AI_PROVIDER="openai"
-OPENAI_API_KEY="tu_clave_de_openai"
+OPENAI_API_KEY="sk-..."
 ```
 
 ---
