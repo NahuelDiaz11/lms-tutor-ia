@@ -39,7 +39,8 @@ REGLAS ESTRICTAS DE RESPUESTA:
       },
     ];
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
     const res = await fetch(endpoint, {
       method: 'POST',
@@ -68,7 +69,7 @@ REGLAS ESTRICTAS DE RESPUESTA:
     return {
       answer: answer.trim(),
       isContextual,
-      providerUsed: 'Google Gemini (gemini-1.5-flash)',
+      providerUsed: `Google Gemini (${modelName})`,
     };
   }
 }
