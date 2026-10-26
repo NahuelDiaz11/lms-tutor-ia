@@ -20,6 +20,7 @@ RUN npx prisma generate
 RUN npx prisma db push --accept-data-loss
 RUN node scripts/seed.mjs
 RUN npm run build
+RUN cp -f /app/prisma/dev.db /app/dev.db
 
 # Contenedor de producción final
 FROM base AS runner
