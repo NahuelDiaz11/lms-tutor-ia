@@ -2,12 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   UserCheck,
   UserX,
-  GraduationCap,
-  Sparkles,
   LogOut,
   LogIn,
   User as UserIcon,
@@ -22,26 +20,42 @@ interface User {
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchSession = async () => {
     try {
-      const res = await fetch('/api/auth/session');
+      const res = await fetch('/api/auth/session', { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
-        setCurrentUser(data.user);
+        setCurrentUser(data.user || null);
         setUsers(data.availableUsers || []);
+      } else {
+        setCurrentUser(null);
       }
     } catch (e) {
       console.error('Error al cargar sesión:', e);
+      setCurrentUser(null);
+    } finally {
+      setIsCheckingSession(false);
     }
   };
 
   useEffect(() => {
     fetchSession();
-  }, []);
+
+    const handleAuthChange = () => {
+      fetchSession();
+    };
+
+    window.addEventListener('auth-change', handleAuthChange);
+    return () => {
+      window.removeEventListener('auth-change', handleAuthChange);
+    };
+  }, [pathname]);
 
   const handleSwitchUser = async (userId: string) => {
     setIsLoading(true);
@@ -52,8 +66,7 @@ export default function Navbar() {
         body: JSON.stringify({ userId }),
       });
       if (res.ok) {
-        const data = await res.json();
-        setCurrentUser(data.user);
+        window.dispatchEvent(new Event('auth-change'));
         window.location.reload();
       }
     } catch (e) {
@@ -68,8 +81,8 @@ export default function Navbar() {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       setCurrentUser(null);
-      router.push('/login');
-      router.refresh();
+      window.dispatchEvent(new Event('auth-change'));
+      window.location.href = '/login';
     } catch (e) {
       console.error('Error al cerrar sesión:', e);
     } finally {
@@ -103,9 +116,32 @@ export default function Navbar() {
         </Link>
 
         {/* User Session Bar */}
-        <div className="flex items-center gap-3">
-          {currentUser ? (
-            <>
+        <div className="flex items-center gap-2 sm:gap-3">
+          {isCheckingSession ? (
+            /* Placeholder mientras se verifica la sesión para evitar parpadeos */
+            <div className="h-8 w-24 bg-slate-100 rounded-xl animate-pulse"></div>
+          ) : currentUser ? (
+            /* Vista con Sesión Iniciada: NUNCA muestra "Iniciar Sesión", muestra información y botón "Cerrar Sesión" */
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Información del Alumno Activo */}
+              <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-[#071D3F]">
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-[11px] ${
+                    isAuthorized
+                      ? 'bg-emerald-100 text-emerald-700'
+                      : 'bg-rose-100 text-rose-700'
+                  }`}
+                >
+                  {currentUser.name.charAt(0)}
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-bold leading-tight truncate max-w-[120px]">{currentUser.name}</span>
+                  <span className="text-[10px] text-slate-500 font-medium">
+                    {isAuthorized ? 'Acceso Autorizado' : 'Sin Matrícula'}
+                  </span>
+                </div>
+              </div>
+
               {/* Conmutador de Perfiles para Evaluación Rápida */}
               <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
                 {users.map((u) => {
@@ -118,41 +154,46 @@ export default function Navbar() {
                       onClick={() => handleSwitchUser(u.id)}
                       disabled={isLoading || active}
                       title={`Cambiar a ${u.name}`}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                         active
                           ? hasAccess
-                            ? 'bg-emerald-600 text-white shadow-sm'
-                            : 'bg-rose-600 text-white shadow-sm'
+                            ? 'bg-emerald-600 text-white shadow-sm font-semibold'
+                            : 'bg-rose-600 text-white shadow-sm font-semibold'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                       } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       {hasAccess ? (
-                        <UserCheck className="w-3.5 h-3.5" />
+                        <UserCheck className="w-3.5 h-3.5 shrink-0" />
                       ) : (
-                        <UserX className="w-3.5 h-3.5" />
+                        <UserX className="w-3.5 h-3.5 shrink-0" />
                       )}
-                      <span className="truncate max-w-[110px] sm:max-w-none">
+                      <span className="hidden sm:inline">
                         {hasAccess ? 'Con Acceso' : 'Sin Acceso'}
                       </span>
+                      <span className="sm:hidden">
+                        {hasAccess ? 'Ana' : 'Pedro'}
+                      </span>
                       {active && (
-                        <span className="ml-1 w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
                       )}
                     </button>
                   );
                 })}
               </div>
 
-              {/* Botón Logout */}
+              {/* Botón Explícito de Cerrar Sesión */}
               <button
                 onClick={handleLogout}
                 disabled={isLoading}
                 title="Cerrar Sesión"
-                className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition border border-transparent hover:border-rose-200"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-[#EB0202] border border-slate-200 hover:border-rose-200 text-xs font-semibold shadow-xs transition duration-150"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                <span className="whitespace-nowrap">Cerrar Sesión</span>
               </button>
-            </>
+            </div>
           ) : (
+            /* Vista sin Sesión: Único estado donde se muestra "Iniciar Sesión" */
             <Link
               href="/login"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#071D3F] hover:bg-[#071D3F]/90 text-white font-medium text-xs shadow-sm transition"

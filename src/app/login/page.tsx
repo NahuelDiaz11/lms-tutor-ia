@@ -42,9 +42,9 @@ export default function LoginPage() {
         throw new Error(data.error || 'Fallo de autenticación');
       }
 
-      // Redirigir al inicio tras login exitoso
-      router.push('/');
-      router.refresh();
+      // Notificar cambio de autenticación y redirigir al inicio tras login exitoso
+      window.dispatchEvent(new Event('auth-change'));
+      window.location.href = '/';
     } catch (err: any) {
       setErrorMessage(err.message || 'Error al iniciar sesión');
     } finally {

@@ -189,7 +189,7 @@ export default function HomePage() {
           </div>
           <Link
             href="/login"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs shadow-sm transition shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#071D3F] hover:bg-[#071D3F]/90 text-white font-medium text-xs shadow-sm transition shrink-0"
           >
             Ir a Iniciar Sesión <ArrowRight className="w-4 h-4" />
           </Link>
