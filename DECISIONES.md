@@ -34,20 +34,25 @@ El propósito de la POC es validar de forma demostrable, comprensible y acotada 
 ### 2.3. Sistema de Login y Autenticación de Dos Alumnos
 * **Decisión:** Pantalla de Login dedicada (`/login`) con autenticación por credenciales (email + contraseña) y tarjetas de acceso rápido demostrativo.
 * **Perfiles de Prueba:**
-  * **Ana Silva (Con Acceso):** `alumno.autorizado@edtech.poc` / `password123` (inscrita en el curso de inglés).
-  * **Pedro Gómez (Sin Acceso):** `alumno.noautorizado@edtech.poc` / `password123` (sin matrícula en el curso, para validar el bloqueo HTTP 403 Forbidden).
+  * **Ana Silva (Con Acceso):** `alumno.autorizado@classedtech.com.co` / `password123` (inscrita en el curso de inglés).
+  * **Pedro Gómez (Sin Acceso):** `alumno.noautorizado@classedtech.com.co` / `password123` (sin matrícula en el curso, para validar el bloqueo HTTP 403 Forbidden).
 * **Sesiones Seguras:**
   * Al autenticarse, el servidor expide una cookie HTTP-Only segura (`poc_lms_user_id`) con política `SameSite: Lax`, protegiendo la sesión contra robo de tokens por scripts del lado del cliente (XSS).
   * El usuario dispone de opción de *Cerrar Sesión* (Logout) y conmutación de cuentas en tiempo real en la barra de navegación para agilizar la revisión.
 
-### 2.3. Interacción por Voz (STT y TTS): Web Speech API Nativa
-* **Decisión:** Implementación mediante la **Web Speech API** del navegador (`SpeechRecognition` para Speech-to-Text y `SpeechSynthesis` para Text-to-Speech).
+### 2.4. Interacción por Voz Humana (STT y TTS Híbrido)
+* **Decisión:** Implementación dual y resiliente para la práctica de Speaking y Listening:
+  * **Speaking (STT):** Mediante la **Web Speech API** nativa (`SpeechRecognition`), transcribiendo la voz del alumno en tiempo real dentro del campo de texto para que pueda auditarla y editarla antes de enviarla.
+  * **Listening (TTS Humano de Alta Fidelidad):** A través del endpoint `/api/tts` que genera audio MP3 natural mediante **Google Neural TTS (WaveNet)** y soporta **OpenAI TTS (`tts-1`)** sin requerir API keys pagas para funcionar, con fallback automático al sintetizador del navegador ordenado por ranking heurístico de voces humanas.
 * **Justificación:**
-  * **Cero costo y máxima accesibilidad:** Respeta de forma estricta la directiva del enunciado: *"No se requiere contratar servicios de pago y no deben compartirse credenciales o secretos"*.
-  * **Transcripción antes del envío:** El alumno puede ver en tiempo real cómo se transcribe su voz al campo de texto, dándole la oportunidad de revisar o corregir la redacción antes de remitirla al tutor.
-  * **Retroalimentación auditiva:** Permite escuchar la explicación generada con controles de inicio, pausa y detención.
+  * **Dicción fluida y pedagógica:** Elimina la voz robótica o metálica típica de sintetizadores locales en sistemas Linux/Windows, brindando una experiencia docente realista.
+  * **Transcripción previa editable:** El alumno tiene pleno control sobre el mensaje que remite al tutor de IA.
 
-### 2.4. Motor del Tutor de IA: Estrategia Híbrida y Fallback Seguro
+### 2.5. Flujo de Navegación Inicial y Middleware
+* **Decisión:** Implementación de `src/middleware.ts` para redirigir automáticamente cualquier visita no autenticada en la raíz (`/`) hacia `/login`.
+* **Justificación:** Garantiza que la pantalla de inicio para cualquier evaluador o estudiante sea siempre el Login oficial de Class-Edtech Learning, permitiéndole seleccionar de entrada el perfil de prueba deseado (Ana o Pedro).
+
+### 2.6. Motor del Tutor de IA: Estrategia Híbrida y Fallback Seguro
 * **Decisión:** Arquitectura de proveedor desacoplado (`MockAIProvider`, `GeminiAIProvider`, `OpenAIAIProvider`) con inyección estricta de contexto y fallback automático.
 * **Justificación:**
   * **Mock Inteligente Offline (por defecto):** Permite ejecutar y evaluar toda la suite de pruebas y la aplicación web de inmediato, sin requerir una conexión a internet ni una API key activa. Responde fielmente a preguntas del contenido (por ejemplo: *"¿Para qué sirve POST?"*) y activa de forma determinista la respuesta de insuficiencia ante preguntas ajenas.
