@@ -1,6 +1,9 @@
 # Dockerfile multi-stage para ejecución rápida y liviana
 FROM node:20-alpine AS base
 
+# Instalar OpenSSL y libc6-compat requeridos por Prisma en Alpine Linux
+RUN apk add --no-cache openssl libc6-compat
+
 WORKDIR /app
 
 # Instalar dependencias
