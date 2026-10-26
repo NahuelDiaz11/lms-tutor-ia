@@ -179,36 +179,43 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-[700px] bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+    <div className="flex flex-col h-[650px] sm:h-[700px] lg:h-[calc(100vh-120px)] max-h-[780px] min-h-[520px] bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
       {/* Franja Roja Superior con Degradé Oficial (#EB0202 -> #CC0003) */}
-      <div className="h-2 w-full bg-gradient-to-r from-[#EB0202] to-[#CC0003]"></div>
+      <div className="h-2 w-full bg-gradient-to-r from-[#EB0202] to-[#CC0003] shrink-0"></div>
 
       {/* Header del Tutor con Azul Marino #071D3F */}
-      <div className="bg-[#071D3F] text-white px-5 py-4 flex items-center justify-between border-b border-[#071D3F]">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
-            <img src="/logo.png" alt="Class-Edtech" className="w-6 h-6 object-contain" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="font-bold text-sm tracking-wide text-white">Tutor IA Class-Edtech</h2>
-              <span className="flex items-center gap-1 text-[11px] bg-[#EB0202] text-white px-2 py-0.5 rounded-full font-bold">
-                <Sparkles className="w-3 h-3 text-amber-200" /> Asistencia Activa
-              </span>
+      <div className="bg-[#071D3F] text-white p-4 sm:p-5 border-b border-[#071D3F] shrink-0">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-3 min-w-0 flex-1">
+            <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0 mt-0.5">
+              <img src="/logo.png" alt="Class-Edtech" className="w-6 h-6 object-contain" />
             </div>
-            <p className="text-xs text-slate-300 truncate max-w-xs sm:max-w-md">
-              Restringido al contenido de: <span className="font-semibold text-white">{lessonTitle}</span>
-            </p>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="font-bold text-sm tracking-wide text-white">Tutor IA Class-Edtech</h2>
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] bg-[#EB0202] text-white px-2 py-0.5 rounded-full font-bold shrink-0">
+                  <Sparkles className="w-3 h-3 text-amber-200" /> Asistencia Activa
+                </span>
+              </div>
+              
+              {/* Contexto Pedagógico Delimitado - Totalmente legible sin recortes */}
+              <div className="mt-2 text-xs leading-relaxed text-slate-300">
+                <span className="text-slate-400 font-medium">Restringido al contenido de:</span>
+                <div className="mt-1 font-semibold text-white bg-white/10 border border-white/15 px-2.5 py-1.5 rounded-lg text-xs break-words leading-snug">
+                  {lessonTitle}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <button
-          onClick={loadHistory}
-          title="Recargar historial"
-          className="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition"
-        >
-          <RefreshCw className={`w-4 h-4 ${isLoadingHistory ? 'animate-spin' : ''}`} />
-        </button>
+          <button
+            onClick={loadHistory}
+            title="Recargar historial"
+            className="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-white/10 transition shrink-0 mt-0.5"
+          >
+            <RefreshCw className={`w-4 h-4 ${isLoadingHistory ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
       </div>
 
       {/* Alerta de Incidencia / Error recuperable (Requerimiento 06) */}
@@ -292,7 +299,7 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
                 )}
 
                 <div
-                  className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 text-sm leading-relaxed shadow-xs ${
+                  className={`max-w-[92%] sm:max-w-[85%] rounded-2xl p-3.5 sm:p-4 text-sm leading-relaxed shadow-xs ${
                     isUser
                       ? 'bg-[#071D3F] text-white rounded-br-none'
                       : 'bg-white text-[#071D3F] border border-slate-200/80 rounded-bl-none'
@@ -395,17 +402,17 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
 
       {/* Banner de Grabación Activa (Requerimiento 04 y 06) */}
       {isListening && (
-        <div className="bg-amber-50 border-t border-amber-200 px-4 py-2.5 flex items-center justify-between text-xs text-amber-900">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping"></span>
-            <span className="font-semibold text-rose-700">Grabando tu voz:</span>
-            <span className="italic text-slate-700 truncate max-w-xs sm:max-w-md">
+        <div className="bg-amber-50 border-t border-amber-200 px-4 py-2.5 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-xs text-amber-900 shrink-0">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping shrink-0"></span>
+            <span className="font-semibold text-rose-700 shrink-0">Grabando voz:</span>
+            <span className="italic text-slate-700 break-words text-xs min-w-0">
               {transcript || 'Habla ahora... la voz se transcribirá antes de enviarse'}
             </span>
           </div>
           <button
             onClick={stopListening}
-            className="text-xs bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-md font-medium"
+            className="text-xs bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg font-medium shrink-0 transition"
           >
             Finalizar grabación
           </button>
@@ -476,7 +483,7 @@ export default function TutorChat({ lessonId, lessonTitle }: TutorChatProps) {
           </button>
         </form>
 
-        <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 px-1">
+        <div className="mt-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-[11px] text-slate-400 px-1 leading-snug">
           <span>La respuesta se basará exclusivamente en el contenido de esta lección.</span>
           <span>Pulsa el icono de audio en la respuesta para escucharla.</span>
         </div>
